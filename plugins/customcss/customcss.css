@@ -6,3 +6,22 @@
 *{
     font-family: "Roboto", sans-serif;
 }
+
+.color-thtd > th {
+    background: #8265de !important;
+    color: aliceblue;
+}
+.short-column {
+    width: 150px; /* Adjust to your preferred width */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .table td {
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word; /* Breaks long words */
+  }
+  .disabled-button {
+    pointer-events:none; //This makes it not clickable
+    opacity:0.6;         //This grays it out to look disabled
+}

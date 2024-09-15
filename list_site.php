@@ -23,11 +23,6 @@
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="plugins/customcss/customcss.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
     
 </head>
 
@@ -65,581 +60,167 @@
 
         <div class="container-fluid p-4 bg-white rounded">
           <div class="row">
-              <div class="col-12">
-                  <div class="card">
-                      <div class="card-header bg-primary">
-                          <h3 class="card-title">Fixed Header Table</h3>
-                          <div class="card-tools">
-                          <div class="input-group input-group-sm" style="100%">
-                              <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                              <div class="input-group-append">
-                                  <button type="submit" class="btn btn-danger">
-                                  <i class="fas fa-search"></i>
-                                  </button>
-                              </div>
-                          </div>
-                          </div>
-                      </div>
-                      <div class="card-body table-responsive p-0" h-100>
-                          <table class="table table-head-fixed text-nowrap">
-                          <thead>
-                              <tr>
-                                  <th>No.</th>
-                                  <th>SiteID.</th>
-                                  <th>Site Name.</th>
-                                  <th>Location.</th>
-                                  <th>Street.</th>
-                                  <th>City.</th>
-                                  <th>Province.</th>
-                                  <th>Postal Code.</th>
-                                  <th>Manager Site</th>
-                                  <th>Street</th>
-                                  <th>Update By.</th>
-                                  <th>Edit</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>183</td>
-                                  <td>John Doe</td>
-                                  <td>11-7-2014</td>
-                                  <td><span class="tag tag-success">Approved</span></td>
-                                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                              </tr>
-                          </tbody>
-                          </table>
-                      </div>
-                  </div>
+            <div class="col-lg-6">
+              <div class="row">
+                 <div class="p-2">
+                    <button type="button" class="btn btn-block btn-danger" style="width: 150px;">
+                      <i class="far fa-edit nav-icon"></i>
+                      <?php echo $text_add_new  ?>
+                    </button>
+                 </div>
               </div>
+            </div>
+            <div class="col-lg-6">
+              <form action="/list_site.php" method="get">
+                <div class="input-group">
+                    <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-lg btn-default">
+                      <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="card">
+                    <div class="card-body table-responsive p-0" >
+                      <table class="table table-head-fixed text-nowrap table-bordered table-hover w-100 text-center">
+                        <thead>
+                            <tr class="color-thtd">
+                                <th>No.</th>
+                                <th>SiteID.</th>
+                                <th>Site Name.</th>
+                                <th>Location.</th>
+                                <th>Street.</th>
+                                <th>City.</th>
+                                <th>Province.</th>
+                                <th>Postal Code.</th>
+                                <th>Manager Site</th>
+                                <th>Street</th>
+                                <th>Update By.</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <?php
+                          $limit_site = 10;
+                          //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
+                          $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
+                          if($page < 1){
+                            $page = 1;
+                          }
+                           //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
+                          $start = ($page - 1) * $limit_site;
+                          //สำหรับ search
+                          $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+                          // คำนวณจำนวนหน้าทั้งหมด
+                          $query_all_site = $db_connect->prepare("
+                                                                    SELECT 
+                                                                            COUNT(*) 
+                                                                    FROM 
+                                                                            tbsite
+                                                                    WHERE 
+                                                                            Site_Name LIKE :search
+                          ");
+
+                          //หาจำนวนรวมของทั้งหมด
+                          $query_all_site->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                          $query_all_site->execute();
+                          $total_records = $query_all_site->fetchColumn();
+                          //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
+                          $total_pages = ceil($total_records / $limit_site);
+                          // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
+                          $query_site = $db_connect->prepare("
+                                                                SELECT
+                                                                        tbs.*,
+                                                                        manager.Emp_GivenName AS site_manager_name,
+                                                                        employee.Emp_GivenName AS updated_by_name
+                                                                FROM
+                                                                        tbsite tbs
+                                                                LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
+                                                                LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
+                                                                WHERE 
+                                                                        tbs.isDeleted = 0
+                                                                AND  (
+                                                                        tbs.Site_ID LIKE :search
+                                                                OR 
+                                                                        tbs.Site_Name LIKE :search
+                                                                      )
+                                                                LIMIT
+                                                                        :start, :limit_site
+                          ");
+                          //ป้องกัน SQL injection
+                          $query_site->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                          $query_site->bindValue(':start', $start, PDO::PARAM_INT);
+                          $query_site->bindValue(':limit_site', $limit_site, PDO::PARAM_INT);
+                          $query_site->execute();
+                        ?>
+                        <tbody>
+                        <?php 
+                                if($page > $total_pages){
+                                  echo "<tr><td class='align-middle' colspan='12'>Not Found</td></tr>";
+                                }
+                        ?>
+                          <?php 
+                            $no_site = 0;
+                            while ($show_siteData = $query_site->fetch(PDO::FETCH_ASSOC)) {
+                              $no_site++;
+                          ?>
+                            <tr>
+                                <td class="align-middle"><?php echo $no_site; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_ID']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_Name']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_Location']; ?></span></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_Street']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['site_manager_name']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
+                                <td class="align-middle"><?php echo $show_siteData['updated_by_name']; ?></td>
+                                <td>
+                                  <div class="row">
+                                      <div class="col-lg-12 p-2">
+                                        <button type="button" class="btn btn-block btn-primary">Modify</button>
+                                      </div>
+                                      <div class="col-lg-12 p-2">
+                                        <button type="button" class="btn btn-block btn-danger">Delete</button>
+                                      </div>
+                                  </div>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                      </table>
+                      <div class="card-footer clearfix">
+                      <form action="/list_site.php" method="get">
+                          <ul class="pagination pagination-sm m-0 float-right">
+                              <!-- Previous Page Link -->
+                              <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
+                                  <a class="page-link" href="?page=<?php echo max(1, $page - 1); ?>&search=<?php echo urlencode($search); ?>">«</a>
+                              </li>
+
+                              <!-- Page Number Links -->
+                              <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                  <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                                      <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
+                                  </li>
+                              <?php endfor; ?>
+
+                              <!-- Next Page Link -->
+                              <li class="page-item <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>">
+                                  <a class="page-link" href="?page=<?php echo min($total_pages, $page + 1); ?>&search=<?php echo urlencode($search); ?>">»</a>
+                              </li>
+                          </ul>
+                      </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
       </section>
-      <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">DataTable with minimal features & hover style</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 5.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>สวัสดีครับสวัสดีครับสวัสดีครับสวัสดีครับ
-                      Explorer 5.5
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5.5</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 6
-                    </td>
-                    <td>Win 98+</td>
-                    <td>6</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet Explorer 7</td>
-                    <td>Win XP SP2+</td>
-                    <td>7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>AOL browser (AOL desktop)</td>
-                    <td>Win XP</td>
-                    <td>6</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Firefox 1.0</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Firefox 1.5</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Firefox 2.0</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Firefox 3.0</td>
-                    <td>Win 2k+ / OSX.3+</td>
-                    <td>1.9</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Camino 1.0</td>
-                    <td>OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Camino 1.5</td>
-                    <td>OSX.3+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Netscape 7.2</td>
-                    <td>Win 95+ / Mac OS 8.6-9.2</td>
-                    <td>1.7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Netscape Browser 8</td>
-                    <td>Win 98SE+</td>
-                    <td>1.7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Netscape Navigator 9</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.0</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.1</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.2</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.2</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.3</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.3</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.4</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.4</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.5</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.5</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.6</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.6</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.7</td>
-                    <td>Win 98+ / OSX.1+</td>
-                    <td>1.7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Mozilla 1.8</td>
-                    <td>Win 98+ / OSX.1+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Seamonkey 1.1</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Epiphany 2.20</td>
-                    <td>Gnome</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>Safari 1.2</td>
-                    <td>OSX.3</td>
-                    <td>125.5</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>Safari 1.3</td>
-                    <td>OSX.3</td>
-                    <td>312.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>Safari 2.0</td>
-                    <td>OSX.4+</td>
-                    <td>419.3</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>Safari 3.0</td>
-                    <td>OSX.4+</td>
-                    <td>522.1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>OmniWeb 5.5</td>
-                    <td>OSX.4+</td>
-                    <td>420</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>iPod Touch / iPhone</td>
-                    <td>iPod</td>
-                    <td>420.1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Webkit</td>
-                    <td>S60</td>
-                    <td>S60</td>
-                    <td>413</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 7.0</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 7.5</td>
-                    <td>Win 95+ / OSX.2+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 8.0</td>
-                    <td>Win 95+ / OSX.2+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 8.5</td>
-                    <td>Win 95+ / OSX.2+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 9.0</td>
-                    <td>Win 95+ / OSX.3+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 9.2</td>
-                    <td>Win 88+ / OSX.3+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera 9.5</td>
-                    <td>Win 88+ / OSX.3+</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Opera for Wii</td>
-                    <td>Wii</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Nokia N800</td>
-                    <td>N800</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Presto</td>
-                    <td>Nintendo DS browser</td>
-                    <td>Nintendo DS</td>
-                    <td>8.5</td>
-                    <td>C/A<sup>1</sup></td>
-                  </tr>
-                  <tr>
-                    <td>KHTML</td>
-                    <td>Konqureror 3.1</td>
-                    <td>KDE 3.1</td>
-                    <td>3.1</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>KHTML</td>
-                    <td>Konqureror 3.3</td>
-                    <td>KDE 3.3</td>
-                    <td>3.3</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>KHTML</td>
-                    <td>Konqureror 3.5</td>
-                    <td>KDE 3.5</td>
-                    <td>3.5</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Tasman</td>
-                    <td>Internet Explorer 4.5</td>
-                    <td>Mac OS 8-9</td>
-                    <td>-</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Tasman</td>
-                    <td>Internet Explorer 5.1</td>
-                    <td>Mac OS 7.6-9</td>
-                    <td>1</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Tasman</td>
-                    <td>Internet Explorer 5.2</td>
-                    <td>Mac OS 8-X</td>
-                    <td>1</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>NetFront 3.1</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>NetFront 3.4</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>Dillo 0.8</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>Links</td>
-                    <td>Text only</td>
-                    <td>-</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>Lynx</td>
-                    <td>Text only</td>
-                    <td>-</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>IE Mobile</td>
-                    <td>Windows Mobile 6</td>
-                    <td>-</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Misc</td>
-                    <td>PSP browser</td>
-                    <td>PSP</td>
-                    <td>-</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>Other browsers</td>
-                    <td>All others</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>U</td>
-                  </tr>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">DataTable with default features</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 4.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 5.0
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>C</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 5.5
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5.5</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet
-                      Explorer 6
-                    </td>
-                    <td>Win 98+</td>
-                    <td>6</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>สวัสดีครับ</td>
-                    <td>Internet Explorer 7</td>
-                    <td>Win XP SP2+</td>
-                    <td>7</td>
-                    <td>A</td>
-                  </tr>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>สวัสดีครับ engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
       <!-- /.content -->
     </div>
     
@@ -679,66 +260,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="dist/js/pages/dashboard.js"></script>
     <script src="../assets/js/custom.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/jszip/jszip.min.js"></script>
-    <script src="plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-    <script>
-$(function(){
-    pdfMake.fonts = {
-        THSarabun: {
-            normal: 'THSarabun.ttf',
-            bold: 'THSarabun-Bold.ttf',
-            italics: 'THSarabun-Italic.ttf',
-            bolditalics: 'THSarabun-BoldItalic.ttf'
-        }
-    };
-
-    $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": [
-            "copy", "csv", "excel", 
-            {
-                extend: "pdf",
-                customize: function (doc) {
-                    doc.defaultStyle.font = 'THSarabun'; // Set the default font to THSarabun
-                }
-            },
-            "print", "colvis"
-        ]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        "buttons": [
-            "copy", "csv", "excel", 
-            {
-                extend: "pdf",
-                customize: function (doc) {
-                    doc.defaultStyle.font = 'THSarabun'; // Apply the THSarabun font here as well
-                }
-            },
-            "print"
-        ]
-    }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
-});
-  </script>
+    
 </body>
 
 </html>

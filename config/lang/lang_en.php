@@ -37,5 +37,6 @@
     $text_menu_Add_Close_Code = "Add / Edit Close Code";
     $text_menu_Add_Action_Code = "Add / Edit Action Code";
 
+    $text_add_new = "Add New";
 
 ?>
