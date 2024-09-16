@@ -32,3 +32,6 @@
   width: 150px;
   height: 150px;
 }
+.select2-container--default .select2-selection--single {
+  z-index: 1051; /* Adjust as needed, ensuring it's higher than other elements */
+}

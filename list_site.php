@@ -20,13 +20,14 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <link rel="stylesheet" href="plugins/customcss/customcss.css">
     
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed" style="background-color: #f9f4f3;">
+<body class=" layout-fixed" style="background-color: #f9f4f3;">
 <!-- Site wrapper -->
   <div class="wrapper">
     <!-- Navbar -->
@@ -118,17 +119,13 @@
                                     </div>
                                   </div>
                                   <div class="col-lg-12">
-                                  <div class="form-group">
-                                      <label for="inputemployee">Employee Name.</label>
-                                      <select class="form-control" id="exampleFormControlSelect1">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                      </select>
-                                      
-                                    </div>
+                                      <div class="form-group">
+                                        <label>Order By:</label>
+                                        <select class="select2" style="width: 100%;">
+                                            <option selected>Title</option>
+                                            <option>Date</option>
+                                        </select>
+                                      </div>
                                   </div>
                                 </form>
                               </div>
@@ -350,8 +347,6 @@
 
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -365,7 +360,15 @@
     <script src="dist/js/adminlte.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="dist/js/pages/dashboard.js"></script>
-    <script src="../assets/js/custom.js"></script>
+    <!-- Select2 -->
+    <script src="plugins/select2/js/select2.full.min.js"></script>
+    <script>
+      $(function () {
+        $('.select2').select2()
+      });
+  </script>
+
+    <script src="assets/js/custom.js"></script>
     
 </body>
 
