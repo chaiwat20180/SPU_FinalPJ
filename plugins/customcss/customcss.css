@@ -22,6 +22,13 @@
     word-wrap: break-word; /* Breaks long words */
   }
   .disabled-button {
-    pointer-events:none; //This makes it not clickable
-    opacity:0.6;         //This grays it out to look disabled
+    pointer-events:none; 
+    opacity:0.6;         
+}
+.clear-shardow{
+  box-shadow: none !important;
+}
+.resizer-logo150px{
+  width: 150px;
+  height: 150px;
 }

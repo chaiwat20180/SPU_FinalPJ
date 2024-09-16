@@ -1,5 +1,5 @@
 <?php
-    //Webpage
+    //LoginPage
     $title_webpage = "Service-SP";
     $title_card = "Service-SP";
     $title_user_login = "Username";
@@ -11,6 +11,8 @@
 
     //alert
     $alert_login = "Username or Password is incorrect";
+    $alert_site_title = "Confirm alert";
+    $alert_site = "Are you sure you want to delete this?";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -37,6 +39,19 @@
     $text_menu_Add_Close_Code = "Add / Edit Close Code";
     $text_menu_Add_Action_Code = "Add / Edit Action Code";
 
+    //Content
+    $text_add_site = "Add New";
+    $text_add_site_name = "Site Name: ";
+    $text_add_site_location = "Location: ";
+    $text_add_site_street = "Street: ";
+    $text_add_site_city = "City: ";
+    $text_add_site_province = "Provice: ";
+    $text_add_site_postcode = "Post Code: ";
+    $text_add_employee= "Manager Site";
+    
+    //title_button
     $text_add_new = "Add New";
-
+    $test_edit = "Edit";
+    $test_delete = "Delete";
+    $text_cancel = "Cancel";
 ?>

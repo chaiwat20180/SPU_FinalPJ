@@ -49,7 +49,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-12">
-              <h1>Fixed Layout</h1>
+              <h1>Site Menu</h1>
             </div>
           </div>
         </div><!-- /.container-fluid -->
@@ -63,10 +63,85 @@
             <div class="col-lg-6">
               <div class="row">
                  <div class="p-2">
-                    <button type="button" class="btn btn-block btn-danger" style="width: 150px;">
+                    <button type="button" class="btn btn-block btn-success" style="width: 150px;"  data-toggle="modal" data-target="#addsite">
                       <i class="far fa-edit nav-icon"></i>
                       <?php echo $text_add_new  ?>
                     </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="addsite" tabindex="-1" role="dialog" aria-labelledby="addsite" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $text_add_site; ?></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form action="" method="post">
+                          <div class="modal-body">
+                            <div class="container">
+                              <div class="row">
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Site Name"><?php echo $text_add_site_name ?></label>
+                                      <input type="text" class="form-control" id="inputsitename" placeholder="Site Name" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Location"><?php echo $text_add_site_location ?></label>
+                                      <input type="text" class="form-control" id="inputlocation" placeholder="Location" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Location"><?php echo $text_add_site_street ?></label>
+                                      <input type="text" class="form-control" id="inputlocation" placeholder="Street" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Location"><?php echo $text_add_site_city ?></label>
+                                      <input type="text" class="form-control" id="inputlocation" placeholder="City" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Location"><?php echo $text_add_site_province ?></label>
+                                      <input type="text" class="form-control" id="inputlocation" placeholder="Province" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="Location"><?php echo $text_add_site_postcode ?></label>
+                                      <input type="text" class="form-control" id="inputlocation" placeholder="Post Code" required>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12">
+                                  <div class="form-group">
+                                      <label for="inputemployee">Employee Name.</label>
+                                      <select class="form-control" id="exampleFormControlSelect1">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                      </select>
+                                      
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                          </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                  </div>
               </div>
             </div>
@@ -84,7 +159,7 @@
             </div>
             <div class="col-12 mt-4">
                 <div class="card">
-                    <div class="card-body table-responsive p-0" >
+                    <div class="card-body table-responsive p-4" >
                       <table class="table table-head-fixed text-nowrap table-bordered table-hover w-100 text-center">
                         <thead>
                             <tr class="color-thtd">
@@ -99,7 +174,7 @@
                                 <th>Manager Site</th>
                                 <th>Street</th>
                                 <th>Update By.</th>
-                                <th>Edit</th>
+                                <th style="width: 150px;">Edit</th>
                             </tr>
                         </thead>
                         <?php
@@ -121,7 +196,12 @@
                                                                     FROM 
                                                                             tbsite
                                                                     WHERE 
+                                                                            isDeleted = 0
+                                                                    AND  (
+                                                                            Site_ID LIKE :search
+                                                                    OR 
                                                                             Site_Name LIKE :search
+                                                                          )
                           ");
 
                           //หาจำนวนรวมของทั้งหมด
@@ -161,6 +241,7 @@
                                 if($page > $total_pages){
                                   echo "<tr><td class='align-middle' colspan='12'>Not Found</td></tr>";
                                 }
+                                else{
                         ?>
                           <?php 
                             $no_site = 0;
@@ -182,18 +263,43 @@
                                 <td>
                                   <div class="row">
                                       <div class="col-lg-12 p-2">
-                                        <button type="button" class="btn btn-block btn-primary">Modify</button>
+                                        <button type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i> <?php echo $test_edit ?></button>
                                       </div>
                                       <div class="col-lg-12 p-2">
-                                        <button type="button" class="btn btn-block btn-danger">Delete</button>
+                                        <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $test_delete ?></button>
+                                      </div>
+                                      <!-- Modal -->
+                                      <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $alert_site_title;?></h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <div class="mb-3">
+                                                <img src="asset/image/warning-icon.gif" class="img-thumbnail border-0 clear-shardow resizer-logo150px" alt="" srcset="">
+                                              </div>
+                                              <div class="mb-3">
+                                                <?php echo $alert_site;?>
+                                              </div>
+                                            <div class="modal-footer">
+                                              <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
+                                              <a class="btn btn-danger" href="http://www.google.com"><?php echo $test_delete ?></a>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
                                   </div>
                                 </td>
                             </tr>
-                            <?php } ?>
+                            
+                            <?php } } ?>
                         </tbody>
                       </table>
-                      <div class="card-footer clearfix">
+                      <div class="card-footer clearfix bg-white">
                       <form action="/list_site.php" method="get">
                           <ul class="pagination pagination-sm m-0 float-right">
                               <!-- Previous Page Link -->
