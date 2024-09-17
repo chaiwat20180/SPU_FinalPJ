@@ -8,6 +8,7 @@
 
     //Event
     include 'event/login.php';
+    include 'event/addsite.php';
 
     //config&query
     include 'config/fetch_userdata.php';

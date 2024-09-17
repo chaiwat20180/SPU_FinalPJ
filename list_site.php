@@ -25,7 +25,7 @@
    </head>
    <body class=" layout-fixed" style="background-color: #f9f4f3;">
       <!-- Site wrapper -->
-      <div class="wrapper">
+      <div class="wrapper d-flex flex-column min-vh-100">
          <!-- Navbar -->
          <nav class="main-header navbar navbar-expand navbar-primary navbar-light fixed-top">
             <!-- Left navbar links -->
@@ -62,7 +62,7 @@
                               <?php echo $text_add_new  ?>
                               </button>
                               <!-- Modal -->
-                              <div class="modal fade" id="addsite" tabindex="-1" role="dialog" aria-labelledby="addsite" aria-hidden="true">
+                              <div class="modal fade" id="addsite" role="dialog" aria-labelledby="addsite" aria-hidden="true">
                                  <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                        <div class="modal-header">
@@ -71,52 +71,67 @@
                                           <span aria-hidden="true">&times;</span>
                                           </button>
                                        </div>
-                                       <form action="" method="post">
+                                       <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                                                         <input type="text" class="form-control" id="inputsitename" placeholder="Site Name" required>
+                                                         <input type="text" class="form-control" id="inputsitename" name="sitename" placeholder="Site Name" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_location ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" placeholder="Location" required>
+                                                         <input type="text" class="form-control" id="inputlocation" name="location" placeholder="Location" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_street ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" placeholder="Street" required>
+                                                         <input type="text" class="form-control" id="inputlocation" name="street" placeholder="Street" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_city ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" placeholder="City" required>
+                                                         <input type="text" class="form-control" id="inputlocation" name="city" placeholder="City" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_province ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" placeholder="Province" required>
+                                                         <input type="text" class="form-control" id="inputlocation" name="provice" placeholder="Province" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" placeholder="Post Code" required>
+                                                         <input type="text" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
-                                                         <label>Order By:</label>
-                                                         <select class="select2" style="width: 100%;">
-                                                            <option selected>Title</option>
-                                                            <option>Date</option>
+                                                         <label>Manager</label>
+                                                         <select class="select2" style="width: 100%;"  name="manager">
+                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
+                                                            <?php 
+                                                               $query_all_emp_value = $db_connect->prepare("
+                                                                  SELECT
+                                                                        Emp_ID ,
+                                                                        Emp_FirstName,
+                                                                        Emp_LastName
+                                                                  FROM
+                                                                        tbemployee 
+                                                               ");
+                                                               $query_all_emp_value->execute();
+                                                               while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
+                                                            ?>
+                                                               <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
+                                                            <?php 
+                                                               }
+                                                            ?>
                                                          </select>
                                                       </div>
                                                    </div>
@@ -124,8 +139,8 @@
                                              </div>
                                           </div>
                                           <div class="modal-footer">
-                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="button" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                             <button type="submit" name="addsite" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -316,13 +331,13 @@
             </section>
             <!-- /.content -->
          </div>
-         <!-- /.content-wrapper -->
-         <footer class="main-footer mt-2">
+         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                <b>Version</b> 0.0.1
             </div>
             <strong>Copyright &copy; 2024 <a href="https://web.facebook.com/kchaiwat24">SPU_66701067</a>.</strong> All rights reserved.
          </footer>
+         <!-- /.content-wrapper -->
          <!-- Control Sidebar -->
          <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
@@ -349,7 +364,7 @@
       <script src="plugins/select2/js/select2.full.min.js"></script>
       <script>
          $(function () {
-           $('.select2').select2()
+           $('.select2').select2({})
          });
       </script>
       <script src="assets/js/custom.js"></script>
