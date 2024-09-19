@@ -51,6 +51,7 @@
                 ':Site_Manager' => $manager,
                 ':Emp_ID' => $_SESSION['Emp_ID']
             ]); 
+            
         }
         else{
             $max_site_id = $max_site_id + 1; 
@@ -74,7 +75,7 @@
                                                                     0
                                                                 )
             ");
-            $insert_query->execute([
+            if ($insert_query->execute([
                 ':Site_ID' => $new_site_id,
                 ':Site_Name' => $site_name,
                 ':Site_Location' => $location,
@@ -84,7 +85,12 @@
                 ':Site_Postal_Code' => $postcode,
                 ':Site_Manager' => $manager,
                 ':Emp_ID' => $_SESSION['Emp_ID']
-            ]); 
+            ])) {
+                $_SESSION['status_insert'] = 'true'; // Explicitly set to string 'true'
+                header("location:list_site.php");
+            } else {
+                $_SESSION['status_insert'] = 'false'; // Explicitly set to string 'false'
+            }
         }
     }
 ?>

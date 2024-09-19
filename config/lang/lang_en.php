@@ -54,4 +54,5 @@
     $test_edit = "Edit";
     $test_delete = "Delete";
     $text_cancel = "Cancel";
+    $text_success = "Success";
 ?>

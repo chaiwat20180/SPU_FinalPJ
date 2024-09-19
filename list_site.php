@@ -272,31 +272,6 @@
                                              <div class="col-lg-12 p-2">
                                                 <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $test_delete ?></button>
                                              </div>
-                                             <!-- Modal -->
-                                             <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                   <div class="modal-content">
-                                                      <div class="modal-header">
-                                                         <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $alert_site_title;?></h5>
-                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                         <span aria-hidden="true">&times;</span>
-                                                         </button>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                         <div class="mb-3">
-                                                            <img src="asset/image/warning-icon.gif" class="img-thumbnail border-0 clear-shardow resizer-logo150px" alt="" srcset="">
-                                                         </div>
-                                                         <div class="mb-3">
-                                                            <?php echo $alert_site;?>
-                                                         </div>
-                                                         <div class="modal-footer">
-                                                            <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                            <a class="btn btn-danger" href="http://www.google.com"><?php echo $test_delete ?></a>
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                </div>
-                                             </div>
                                           </div>
                                        </td>
                                     </tr>
@@ -337,6 +312,8 @@
             </div>
             <strong>Copyright &copy; 2024 <a href="https://web.facebook.com/kchaiwat24">SPU_66701067</a>.</strong> All rights reserved.
          </footer>
+         <!-- Modal -->
+
          <!-- /.content-wrapper -->
          <!-- Control Sidebar -->
          <aside class="control-sidebar control-sidebar-dark">
@@ -344,6 +321,7 @@
          </aside>
          <!-- /.control-sidebar -->
       </div>
+
       <!-- ./wrapper -->
       <!-- jQuery -->
       <script src="plugins/jquery/jquery.min.js"></script>
@@ -368,6 +346,48 @@
          });
       </script>
       <script src="assets/js/custom.js"></script>
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle"><?php echo $text_success; ?></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" name="cancel-button">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+         </div>
+      </div>
+      </div>
+      <script>
+         $(document).ready(function(){
+            var operationSuccess = "<?php echo $_SESSION['status_insert'] ?? 'false'; ?>";
+            
+            if (operationSuccess === 'true') {
+               $('#exampleModalCenter').modal('show');
+            }
+
+            // Set a timeout to automatically trigger the AJAX call after 2 seconds
+            setTimeout(function() {
+               $.ajax({
+                     url: 'unset_session.php', // Make sure this points to a separate PHP script
+                     type: 'POST',
+                     success: function(response) {
+                        console.log(response); // Output success message to console
+                     },
+                     error: function() {
+                        console.log('Error unsetting the session variable.'); // Output error message to console
+                     }
+               });
+            }, 1000); // 2000 milliseconds = 2 seconds
+         });
+      </script>
    </body>
 </html>
 <?php 
