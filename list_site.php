@@ -273,6 +273,31 @@
                                                 <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $test_delete ?></button>
                                              </div>
                                           </div>
+                                          <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                             <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                   <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $alert_site_title;?></h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                   </div>
+                                                   <div class="modal-body">
+                                                      <div class="mb-3">
+                                                         <img src="asset/image/warning-icon.gif" class="img-thumbnail border-0 clear-shardow resizer-logo150px" alt="" srcset="">
+                                                      </div>
+                                                      <div class="mb-3">
+                                                         <?php echo $alert_site;?>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                         <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $test_delete ?></a>
+                                                      </div>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                             </div>
+                                          </div>
                                        </td>
                                     </tr>
                                     <?php } } ?>
@@ -346,46 +371,54 @@
          });
       </script>
       <script src="assets/js/custom.js"></script>
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle"><?php echo $text_success; ?></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" name="cancel-button">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-         </div>
-      </div>
-      </div>
+      <?php include 'component/modal.php'; ?>
       <script>
          $(document).ready(function(){
             var operationSuccess = "<?php echo $_SESSION['status_insert'] ?? 'false'; ?>";
-            
-            if (operationSuccess === 'true') {
-               $('#exampleModalCenter').modal('show');
-            }
 
-            // Set a timeout to automatically trigger the AJAX call after 2 seconds
-            setTimeout(function() {
-               $.ajax({
-                     url: 'unset_session.php', // Make sure this points to a separate PHP script
-                     type: 'POST',
-                     success: function(response) {
-                        console.log(response); // Output success message to console
-                     },
-                     error: function() {
-                        console.log('Error unsetting the session variable.'); // Output error message to console
-                     }
-               });
-            }, 1000); // 2000 milliseconds = 2 seconds
+            if (operationSuccess === 'true') {
+               $('#successarlert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#successarlert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
+            $('.delete-btn').click(function(e) {
+               e.preventDefault();  // Prevent the default link behavior
+               var siteId = $(this).data('id');  // Get the site ID from data attribute
+
+               if(confirm('Are you sure you want to delete this item?')) {  // Optional confirmation
+                     $.ajax({
+                        url: 'config/event/delete_list.php',  // Your server-side script to handle deletion
+                        type: 'POST',
+                        data: {id: siteId},
+                        success: function(response) {
+                           console.log('Deletion successful:', response);
+                           // Optionally, close the modal
+                           $('#deleteitem' + siteId).modal('hide');
+                           // Update the UI or redirect as needed
+                        },
+                        error: function() {
+                           alert('Error deleting the item.');
+                        }
+                     });
+               }
+            });
          });
       </script>
    </body>
