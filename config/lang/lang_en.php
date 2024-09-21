@@ -40,7 +40,7 @@
     $text_menu_Add_Action_Code = "Add / Edit Action Code";
 
     //Content
-    $text_add_site = "Add New";
+    $text_add_site = "Add";
     $text_add_site_name = "Site Name: ";
     $text_add_site_location = "Location: ";
     $text_add_site_street = "Street: ";
@@ -48,11 +48,14 @@
     $text_add_site_province = "Provice: ";
     $text_add_site_postcode = "Post Code: ";
     $text_add_employee= "Manager Site";
+    $text_add_dep="Depart Name";
     
     //title_button
     $text_add_new = "Add New";
-    $test_edit = "Edit";
-    $test_delete = "Delete";
+    $text_edit = "Edit";
+    $text_delete = "Delete";
     $text_cancel = "Cancel";
     $text_success = "Success";
+    $text_save = "Save";
+    $text_error = "Failure Please contact Admin";
 ?>

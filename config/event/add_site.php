@@ -55,6 +55,7 @@
                 header("location:list_site.php");
             } else {
                 $_SESSION['status_insert'] = 'false'; 
+                header("location:list_site.php");
             }
             
         }
@@ -93,8 +94,11 @@
             ])) {
                 $_SESSION['status_insert'] = 'true'; 
                 header("location:list_site.php");
+                exit();
             } else {
                 $_SESSION['status_insert'] = 'false'; 
+                header("location:list_site.php");
+                exit();
             }
         }
     }
