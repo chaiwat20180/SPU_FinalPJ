@@ -25,6 +25,7 @@
                         Site_Province = :Site_Province,
                         Site_Postal_Code = :Site_Postal_Code,
                         Site_Manager = :Site_Manager,
+                        UpdatedBy = :UpdatedBy,
                         UpdatedDateTime = NOW()
                 WHERE 
                         Site_ID = :Site_ID
@@ -39,7 +40,9 @@
                 ':Site_City' => $city,
                 ':Site_Province' => $provice,
                 ':Site_Postal_Code' => $postcode,
-                ':Site_Manager' => $manager
+                ':Site_Manager' => $manager,
+                ':UpdatedBy' => $_SESSION['Emp_ID']
+
             ])) {
             $_SESSION['status_insert'] = 'true'; 
                 header("location:list_site.php");

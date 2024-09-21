@@ -12,6 +12,7 @@
     include 'event/add_site.php';
     include 'event/edit_site.php';
     include 'event/add_dep.php';
+    include 'event/edit_dep.php';
 
     //config&query
     include 'config/fetch_userdata.php';

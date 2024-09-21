@@ -1,6 +1,6 @@
 <?php
    include 'config/core_db.php';
-   if(@$_SESSION['Emp_ID'] != "" && $_GET['site_id'] != ""){
+   if(@$_SESSION['Emp_ID'] != "" && $_GET['dep_id'] != ""){
    ?>
    
 <!DOCTYPE html>
@@ -57,67 +57,66 @@
                   <form action="<?php $_SERVER['PHP_SELF'];?>" method="post">
                   <div class="row p-4" >
                   <div class="container">
-                  <a href="list_site.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
+                  <a href="list_dep.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
                      <div class="row">
                         <div class="col-lg-6">
                            <?php
-                              $get_siteId = $_GET['site_id'];
+                              $get_depId = $_GET['dep_id'];
                               $query_last_data_value = $db_connect->prepare("
                                  SELECT
                                        tbemp.Emp_ID ,
                                        tbemp.Emp_FirstName,
                                        tbemp.Emp_LastName,
-                                       tbs.*
+                                       tbs.Site_ID,
+                                       tbs.Site_Name,
+                                       tbs.Site_Location,
+                                       tbdep.*
                                  FROM
-                                       tbsite tbs
-                                 LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbs.Site_Manager
+                                       tbdepartment tbdep
+                                 LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbdep.Dep_Manager
+                                 LEFT JOIN tbsite tbs ON tbs.Site_ID = tbdep.Site_ID
                                  WHERE
-                                       tbs.Site_ID = :site_id
+                                       tbdep.Dep_ID = :Dep_ID
 
                               ");
-                              $query_last_data_value->bindParam(':site_id', $get_siteId);
+                              $query_last_data_value->bindParam(':Dep_ID', $get_depId);
                               $query_last_data_value->execute();
                               $last_data = $query_last_data_value->fetch(PDO::FETCH_ASSOC);
                            ?>
                            <div class="form-group">
-                              <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                              <input type="text" class="form-control" id="inputsitename" name="sitename" placeholder="TH,JP" value="<?php echo $last_data['Site_Name']; ?>" required>
+                              <label for="Site Name"><?php echo $text_add_dep ?></label>
+                              <input type="text" class="form-control" id="inputdepname" name="depname" placeholder="Dep. Name" value="<?php echo $last_data['Dep_Name']; ?>" required>
                            </div>
                         </div>
                         <div class="col-lg-6">
                            <div class="form-group">
                               <label for="Location"><?php echo $text_add_site_location ?></label>
-                              <input type="text" class="form-control" id="inputlocation" name="location" placeholder="Location" value="<?php echo $last_data['Site_Location']; ?>" required>
-                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_site_street ?></label>
-                              <input type="text" class="form-control" id="inputlocation" name="street" placeholder="Street" value="<?php echo $last_data['Site_Street']; ?>" required>
-                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_site_city ?></label>
-                              <input type="text" class="form-control" id="inputlocation" name="city" placeholder="City" value="<?php echo $last_data['Site_City']; ?>" required>
-                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_site_province ?></label>
-                              <input type="text" class="form-control" id="inputlocation" name="provice" placeholder="Province" value="<?php echo $last_data['Site_Province']; ?>" required>
-                           </div>
-                        </div>
-                        <div class="col-lg-6">
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                              <input type="text" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" value="<?php echo $last_data['Site_Postal_Code']; ?>" required>
+                              <select class="select2" style="width: 100%;"  name="location">
+                              <option value="<?php echo $last_data['Site_ID']; ?>"><?php echo $last_data['Site_Name']." - ".$last_data['Site_Location']; ?></option>
+                                 <?php 
+                                    $query_all_site_value = $db_connect->prepare("
+                                       SELECT
+                                             Site_ID ,
+                                             Site_Name,
+                                             Site_Location
+                                       FROM
+                                             tbsite 
+                                    ");
+                                    $query_all_site_value->execute();
+                                    while ($select_all_site_value = $query_all_site_value->fetch(PDO::FETCH_ASSOC)) {
+                                 ?>
+                                    <option value="<?php echo $select_all_site_value['Site_ID']; ?>"><?php echo $select_all_site_value['Site_Name']." - ".$select_all_site_value['Site_Location']; ?></option>
+                                 <?php 
+                                    }
+                                 ?>
+                              </select>
                            </div>
                         </div>
                         <div class="col-lg-12">
                            <div class="form-group">
                               <label>Manager</label>
                               <select class="select2" style="width: 100%;"  name="manager">
+                              <option value="<?php echo $last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']; ?></option>
                                  <?php 
                                     $query_all_emp_value = $db_connect->prepare("
                                        SELECT
@@ -141,7 +140,7 @@
                               <div class="mt-5 ml-auto">
                                  <div class="row d-flex justify-content-end">
                                     <div class="col-sm-12 col-lg-2">
-                                       <button type="submit" name="editsite" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
+                                       <button type="submit" name="editdep" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
                                     </div>
                                  </div>
                               </div>
@@ -248,8 +247,8 @@
              var siteId = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_dep.php',
+               data: {dep_id: depId},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {

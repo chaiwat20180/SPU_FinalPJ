@@ -190,42 +190,40 @@
                                                                                         tbdepartment
                                                                               WHERE 
                                                                                         isDeleted = 0
-                                                                              AND  (
-                                                                                        Dep_ID LIKE :search
-                                                                              OR 
-                                                                                        Dep_Name LIKE :search
-                                                                                    )
+                                                                              
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    $query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                                     $query_all_dep->execute();
                                     $total_records = $query_all_dep->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
                                     $total_pages = ceil($total_records / $limit_dep);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
                                     $query_dep = $db_connect->prepare("
-                                                                            SELECT
-                                                                                        tbdep.*,
-                                                                                        site.Site_Name AS Site_Name,
-                                                                                        manager.Emp_GivenName AS manager_name,
-                                                                                        employee.Emp_GivenName AS updated_by_name
-                                                                            FROM
-                                                                                        tbdepartment tbdep
-                                                                            LEFT JOIN tbsite site on site.Site_ID = tbdep.Site_ID
-                                                                            LEFT JOIN tbemployee manager on manager.Emp_ID = tbdep.Dep_Manager
-                                                                            LEFT JOIN tbemployee employee on employee.Emp_ID = tbdep.UpdatedBy
-                                                                            WHERE 
-                                                                                        tbdep.isDeleted = 0
-                                                                            AND  (
-                                                                                        tbdep.Site_ID LIKE :search
-                                                                            OR 
-                                                                                        tbdep.Dep_Name LIKE :search
-                                                                                    )
-                                                                            ORDER BY 
-                                                                                        tbdep.Dep_ID desc
-                                                                            LIMIT
-                                                                                    :start, :limit_site
+                                                                              SELECT
+                                                                                          tbdep.*,
+                                                                                          site.Site_Name AS Site_Name,
+                                                                                          manager.Emp_GivenName AS manager_name,
+                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                              FROM
+                                                                                          tbdepartment tbdep
+                                                                              LEFT JOIN tbsite site on site.Site_ID = tbdep.Site_ID
+                                                                              LEFT JOIN tbemployee manager on manager.Emp_ID = tbdep.Dep_Manager
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbdep.UpdatedBy
+                                                                              WHERE 
+                                                                                          tbdep.isDeleted = 0
+                                                                              AND  (
+                                                                                          tbdep.Dep_ID LIKE :search
+                                                                              OR 
+                                                                                          tbdep.Dep_Name LIKE :search
+                                                                              OR 
+                                                                                          site.Site_Name LIKE :search
+                                                                                       )
+                                                                              ORDER BY 
+                                                                                          tbdep.Dep_ID desc
+                                                                              LIMIT
+                                                                                       :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
                                     $query_dep->bindValue(':search', "%$search%", PDO::PARAM_STR);
@@ -256,7 +254,7 @@
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_site.php?site_id=<?php echo $show_siteData['Site_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_dep.php?dep_id=<?php echo $show_DepData['Dep_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
@@ -283,7 +281,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_DepData['Dep_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -413,11 +411,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Dep_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_dep.php',
+               data: {Dep_ID: Dep_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
