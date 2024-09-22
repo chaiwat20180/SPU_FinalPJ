@@ -44,7 +44,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Department Menu</h1>
+                        <h1>Assign Group Menu</h1>
                      </div>
                   </div>
                </div>
@@ -68,64 +68,41 @@
                                        <div class="modal-header">
                                           <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $text_add_site; ?></h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true ">&times;</span>
+                                          <span aria-hidden="true">&times;</span>
                                           </button>
                                        </div>
                                        <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                         <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                                                         <select class="select2" style="width: 100%;"  name="sitename">
-                                                            <?php 
-                                                               $query_all_site_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Site_ID ,
-                                                                        Site_Name,
-                                                                        Site_Location
-                                                                  FROM
-                                                                        tbsite 
-                                                               ");
-                                                               $query_all_site_value->execute();
-                                                               while ($select_all_site_value = $query_all_site_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_site_value['Site_ID']; ?>"><?php echo $select_all_site_value['Site_Name']." - ".$select_all_site_value['Site_Location']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="Location"><?php echo $text_add_employee2 ?></label>
+                                                            <select class="select2" style="width: 100%;"  name="employee">
+                                                                  <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
+                                                                  <?php 
+                                                                  $query_all_emp_value = $db_connect->prepare("
+                                                                     SELECT
+                                                                              Emp_ID ,
+                                                                              Emp_FirstName,
+                                                                              Emp_LastName
+                                                                     FROM
+                                                                              tbemployee 
+                                                                  ");
+                                                                  $query_all_emp_value->execute();
+                                                                  while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
+                                                                  ?>
+                                                                  <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
+                                                                  <?php 
+                                                                  }
+                                                                  ?>
+                                                            </select>
+                                                         </div>
                                                       </div>
-                                                   </div>
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_dep ?></label>
-                                                         <input type="text" class="form-control" id="inputdepname" name="department" placeholder="Dep. name" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                        <label for="Location"><?php echo $text_add_employee ?></label>
-                                                        <select class="select2" style="width: 100%;"  name="manager">
-                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
-                                                            <?php 
-                                                            $query_all_emp_value = $db_connect->prepare("
-                                                                SELECT
-                                                                        Emp_ID ,
-                                                                        Emp_FirstName,
-                                                                        Emp_LastName
-                                                                FROM
-                                                                        tbemployee 
-                                                            ");
-                                                            $query_all_emp_value->execute();
-                                                            while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                            <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
-                                                            <?php 
-                                                            }
-                                                            ?>
-                                                        </select>
+                                                         <label for="Location"><?php echo $text_add_assigngroup ?></label>
+                                                         <input type="text" class="form-control" id="inputdepname" name="assigngroupname" placeholder="Assign Group Name" required>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -143,7 +120,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_dep.php" method="get">
+                        <form action="/list_assigngroup.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -161,75 +138,75 @@
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>DepID.</th>
-                                       <th>Dep Name.</th>
-                                       <th>Site Name.</th>
-                                       <th>Manager.</th>
+                                       <th>Assign Group ID.</th>
+                                       <th>Assign Group Name.</th>
+                                       <th>Employee.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
                                  <?php
-                                    $limit_dep = 5;
+                                    $limit_ag = 5;
                                     //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
                                     if($page < 1){
                                       $page = 1;
                                     }
                                      //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
-                                    $start = ($page - 1) * $limit_dep;
+                                    $start = ($page - 1) * $limit_ag;
                                     //สำหรับ search
                                     $search = isset($_GET['search']) ? $_GET['search'] : '';
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
-                                    $query_all_dep = $db_connect->prepare("
+                                    $query_all_ag = $db_connect->prepare("
                                                                               SELECT 
-                                                                                        COUNT(*) 
+                                                                                          COUNT(*) 
                                                                               FROM 
-                                                                                        tbdepartment
+                                                                                          tbassign_group
                                                                               WHERE 
-                                                                                        isDeleted = 0
+                                                                                          isDeleted = 0
                                                                               
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
                                     //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_dep->execute();
-                                    $total_records = $query_all_dep->fetchColumn();
+                                    $query_all_ag->execute();
+                                    $total_records = $query_all_ag->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_dep);
+                                    $total_pages = ceil($total_records / $limit_ag);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_dep = $db_connect->prepare("
+                                    $query_ag = $db_connect->prepare("
                                                                               SELECT
-                                                                                          tbdep.*,
-                                                                                          site.Site_Name AS Site_Name,
-                                                                                          manager.Emp_GivenName AS manager_name,
-                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                                          tbag.*,
+                                                                                          tbemp.Emp_FirstName as Emp_FirstName,
+                                                                                          tbemp.Emp_LastName as Emp_LastName,
+                                                                                          tbag.CreateDateTime,
+                                                                                          updateby.Emp_FirstName as updateby_FirstName,
+                                                                                          updateby.Emp_LastName as updateby_LastName
                                                                               FROM
-                                                                                          tbdepartment tbdep
-                                                                              LEFT JOIN tbsite site on site.Site_ID = tbdep.Site_ID
-                                                                              LEFT JOIN tbemployee manager on manager.Emp_ID = tbdep.Dep_Manager
-                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbdep.UpdatedBy
+                                                                                          tbassign_group tbag
+                                                                              LEFT JOIN tbemployee tbemp on tbemp.Emp_ID = tbag.Emp_ID
+                                                                              LEFT JOIN tbemployee updateby on updateby.Emp_ID = tbag.UpdatedBy
                                                                               WHERE 
-                                                                                          tbdep.isDeleted = 0
+                                                                                          tbag.isDeleted = 0
                                                                               AND  (
-                                                                                          tbdep.Dep_ID LIKE :search
+                                                                                          tbag.Assign_Group_ID LIKE :search
                                                                               OR 
-                                                                                          tbdep.Dep_Name LIKE :search
+                                                                                          tbag.Assign_Group_Name LIKE :search
                                                                               OR 
-                                                                                          site.Site_Name LIKE :search
-                                                                                       )
+                                                                                          tbemp.Emp_FirstName LIKE :search
+                                                                                    )
                                                                               ORDER BY 
-                                                                                          tbdep.Dep_ID desc
+                                                                                          tbag.Assign_Group_ID desc
                                                                               LIMIT
                                                                                        :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
-                                    $query_dep->bindValue(':search', "%$search%", PDO::PARAM_STR);
-                                    $query_dep->bindValue(':start', $start, PDO::PARAM_INT);
-                                    $query_dep->bindValue(':limit_site', $limit_dep, PDO::PARAM_INT);
-                                    $query_dep->execute();
+                                    $query_ag->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_ag->bindValue(':start', $start, PDO::PARAM_INT);
+                                    $query_ag->bindValue(':limit_site', $limit_ag, PDO::PARAM_INT);
+                                    $query_ag->execute();
                                     ?>
                                  <tbody>
                                     <?php 
@@ -239,31 +216,30 @@
                                        else{
                                        ?>
                                     <?php 
-                                       $no_site = 0;
-                                       while ($show_DepData = $query_dep->fetch(PDO::FETCH_ASSOC)) {
-                                         $no_site++;
+                                       $no_ag = 0;
+                                       while ($show_agData = $query_ag->fetch(PDO::FETCH_ASSOC)) {
+                                         $no_ag++;
                                        ?>
                                     <tr>
-                                       <td class="align-middle"><?php echo $no_site; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['Dep_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['Dep_Name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['Site_Name']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_DepData['manager_name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $no_ag; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Assign_Group_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Assign_Group_Name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Emp_FirstName'] . " " .$show_agData['Emp_LastName'] ; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['CreateDateTime']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['updateby_FirstName'] . " " .$show_agData['updateby_LastName'] ; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_dep.php?dep_id=<?php echo $show_DepData['Dep_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_assigngroup.php?dep_id=<?php echo $show_agData['Assign_Group_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
                                              </div>
                                              <div class="col-lg-12 p-2">
-                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
+                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_ag;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
                                              </div>
                                           </div>
-                                          <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                          <div class="modal fade" id="deleteitem<?php echo $no_ag;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                              <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                    <div class="modal-header">
@@ -281,7 +257,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_DepData['Dep_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_agData['Assign_Group_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -433,11 +409,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var Dep_ID = $(event.target).attr('data-id');
+             var Assign_Group_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_dep.php',
-               data: {Dep_ID: Dep_ID},
+               url: 'config/event/delete_assigngroup.php',
+               data: {Assign_Group_ID: Assign_Group_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {

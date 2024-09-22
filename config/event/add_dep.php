@@ -3,7 +3,11 @@
         $site_id = $_POST['sitename'];
         $department = $_POST['department'];
         $manager = $_POST['manager'];
-        
+        if($site_id == "" || $department =="" || $manager == ""){
+            $_SESSION['status_insert'] = 'nulldata'; 
+            header("location:list_dep.php");
+        }
+        else{
         $query_max_dep = $db_connect-> prepare("
                                                     SELECT 
                                                             MAX(CAST(SUBSTRING(Dep_ID, 2) AS INT)) as Max_Dep_ID
@@ -80,4 +84,5 @@
             }
         }
     }
+}
 ?>

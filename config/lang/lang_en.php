@@ -13,6 +13,7 @@
     $alert_login = "Username or Password is incorrect";
     $alert_site_title = "Confirm alert";
     $alert_site = "Are you sure you want to delete this?";
+    $alert_nullData = "Please input data !";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -48,7 +49,9 @@
     $text_add_site_province = "Provice: ";
     $text_add_site_postcode = "Post Code: ";
     $text_add_employee= "Manager Site";
+    $text_add_employee2 = "Employee";
     $text_add_dep="Depart Name";
+    $text_add_assigngroup ="Group Name";
     
     //title_button
     $text_add_new = "Add New";

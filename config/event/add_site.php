@@ -7,7 +7,11 @@
         $provice = $_POST['provice'];
         $postcode = $_POST['postcode'];
         $manager = $_POST['manager'];
-        
+        if($site_name == "" || $location =="" || $street == "" || $city == "" || $provice == "" || $postcode == "" || $manager == ""){
+            $_SESSION['status_insert'] = 'nulldata'; 
+            header("location:list_list.php");
+        }
+        else{
         $query_max_site = $db_connect-> prepare("
                                                     SELECT 
                                                             MAX(CAST(SUBSTRING(Site_ID, 2) AS INT)) as Max_Site_ID
@@ -102,4 +106,5 @@
             }
         }
     }
+}
 ?>
