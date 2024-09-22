@@ -6,7 +6,7 @@ if (isset($_POST['site_id'])) {
 
     error_log("Received POST with siteId: " . $siteId); // Debugging line
     try {
-        $update_isDeleted = $db_connect->prepare("UPDATE tbsite SET isDeleted=1 WHERE Site_ID = :siteId");
+        $update_isDeleted = $db_connect->prepare("UPDATE tbsite SET isDeleted='1' WHERE Site_ID = :siteId");
         $update_isDeleted->bindParam(':siteId', $siteId);
         $update_isDeleted->execute();
 

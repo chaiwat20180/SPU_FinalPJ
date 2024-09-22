@@ -1,13 +1,13 @@
 <?php
 include '../core_db.php';
 
-if (isset($_POST['Dep_ID'])) {
-    $depID = $_POST['Dep_ID'];
+if (isset($_POST['Group_ID'])) {
+    $Group_ID = $_POST['Group_ID'];
 
-    error_log("Received POST with siteId: " . $depID); // Debugging line
+    error_log("Received POST with siteId: " . $Group_ID); // Debugging line
     try {
-        $update_isDeleted = $db_connect->prepare("UPDATE tbdepartment SET isDeleted='1' WHERE DeP_ID = :depID");
-        $update_isDeleted->bindParam(':depID', $depID);
+        $update_isDeleted = $db_connect->prepare("UPDATE tbgroup SET isDeleted='1' WHERE Group_ID = :Group_ID");
+        $update_isDeleted->bindParam(':Group_ID', $Group_ID);
         $update_isDeleted->execute();
 
         if ($update_isDeleted->rowCount() > 0) {

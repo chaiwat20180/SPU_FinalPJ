@@ -13,6 +13,10 @@
     include 'event/edit_site.php';
     include 'event/add_dep.php';
     include 'event/edit_dep.php';
+    include 'event/add_group.php';
+    include 'event/edit_group.php';
+    include 'event/add_assigngroup.php';
+    include 'event/edit_group.php';
 
     //config&query
     include 'config/fetch_userdata.php';

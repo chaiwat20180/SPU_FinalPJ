@@ -102,7 +102,22 @@
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_assigngroup ?></label>
-                                                         <input type="text" class="form-control" id="inputdepname" name="assigngroupname" placeholder="Assign Group Name" required>
+                                                            <select class="select2" style="width: 100%;"  name="group">
+                                                               <?php 
+                                                               $query_all_group_value = $db_connect->prepare("
+                                                                  SELECT
+                                                                           *
+                                                                  FROM
+                                                                           tbgroup 
+                                                               ");
+                                                               $query_all_group_value->execute();
+                                                                  while ($select_all_group_value = $query_all_group_value->fetch(PDO::FETCH_ASSOC)) {
+                                                               ?>
+                                                               <option value="<?php echo $select_all_group_value['Group_ID']; ?>"><?php echo $select_all_group_value['Group_Name']; ?></option>
+                                                               <?php 
+                                                                  }
+                                                               ?>
+                                                            </select>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -110,7 +125,7 @@
                                           </div>
                                           <div class="modal-footer">
                                              <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="submit" name="adddep" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" name="addassigngroup" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -165,7 +180,7 @@
                                                                               FROM 
                                                                                           tbassign_group
                                                                               WHERE 
-                                                                                          isDeleted = 0
+                                                                                          isDeleted = '0'
                                                                               
                                     ");
                                     
@@ -182,20 +197,22 @@
                                                                                           tbemp.Emp_FirstName as Emp_FirstName,
                                                                                           tbemp.Emp_LastName as Emp_LastName,
                                                                                           tbag.CreateDateTime,
+                                                                                          tbg.Group_Name as Group_Name,
                                                                                           updateby.Emp_FirstName as updateby_FirstName,
                                                                                           updateby.Emp_LastName as updateby_LastName
                                                                               FROM
                                                                                           tbassign_group tbag
                                                                               LEFT JOIN tbemployee tbemp on tbemp.Emp_ID = tbag.Emp_ID
                                                                               LEFT JOIN tbemployee updateby on updateby.Emp_ID = tbag.UpdatedBy
+                                                                              LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
                                                                               WHERE 
-                                                                                          tbag.isDeleted = 0
+                                                                                          tbag.isDeleted = '0'
                                                                               AND  (
                                                                                           tbag.Assign_Group_ID LIKE :search
                                                                               OR 
-                                                                                          tbag.Assign_Group_Name LIKE :search
-                                                                              OR 
                                                                                           tbemp.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                          tbg.Group_Name LIKE :search
                                                                                     )
                                                                               ORDER BY 
                                                                                           tbag.Assign_Group_ID desc
@@ -223,7 +240,7 @@
                                     <tr>
                                        <td class="align-middle"><?php echo $no_ag; ?></td>
                                        <td class="align-middle"><?php echo $show_agData['Assign_Group_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_agData['Assign_Group_Name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Group_Name']; ?></td>
                                        <td class="align-middle"><?php echo $show_agData['Emp_FirstName'] . " " .$show_agData['Emp_LastName'] ; ?></td>
                                        <td class="align-middle"><?php echo $show_agData['CreateDateTime']; ?></td>
                                        <td class="align-middle"><?php echo $show_agData['updateby_FirstName'] . " " .$show_agData['updateby_LastName'] ; ?></td>
@@ -369,6 +386,28 @@
                // Set a timeout to hide the modal after 2 seconds
                setTimeout(function() {
                   $('#nullalert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
+            if (operationSuccess === 'duplicatealert') {
+               $('#duplicatealert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#duplicatealert').modal('hide');
                }, 2000);
 
                // Set another timeout to clear the session 1 second after the modal closes

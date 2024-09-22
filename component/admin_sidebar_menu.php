@@ -56,6 +56,12 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                <li class="nav-item ">
+                        <a href="list_group.php" class="nav-link pl-4">
+                            <i class="far fa-edit nav-icon"></i>
+                            <p><?php echo $text_menu_group_add ?> </p>
+                        </a>
+                    </li>
                     <li class="nav-item ">
                         <a href="list_assigngroup.php" class="nav-link pl-4">
                             <i class="far fa-edit nav-icon"></i>
@@ -74,7 +80,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item ">
-                        <a href="pages/charts/chartjs.html" class="nav-link pl-4">
+                        <a href="list_actioncode.php" class="nav-link pl-4">
                             <i class="far fa-edit nav-icon"></i>
                             <p><?php echo $text_menu_Add_Close_Code ?> </p>
                         </a>
@@ -83,6 +89,12 @@
                         <a href="pages/charts/chartjs.html" class="nav-link pl-4">
                             <i class="far fa-edit nav-icon"></i>
                             <p><?php echo $text_menu_Add_Action_Code ?> </p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="pages/charts/chartjs.html" class="nav-link pl-4">
+                            <i class="far fa-edit nav-icon"></i>
+                            <p><?php echo $text_menu_Add_category ?> </p>
                         </a>
                     </li>
                 </ul>

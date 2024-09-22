@@ -33,7 +33,7 @@
                                                                     NULL,
                                                                     :Emp_ID,
                                                                     NOW(),
-                                                                    0
+                                                                    '0'
                                                                 )
             ");
             if ($insert_query->execute([
@@ -66,7 +66,7 @@
                                                                     NULL,
                                                                     :Emp_ID,
                                                                     NOW(),
-                                                                    0
+                                                                    '0'
                                                                 )
             ");
             if ($insert_query->execute([

@@ -189,7 +189,7 @@
                                                                               FROM 
                                                                                         tbdepartment
                                                                               WHERE 
-                                                                                        isDeleted = 0
+                                                                                        isDeleted = '0'
                                                                               
                                     ");
                                     
@@ -212,7 +212,7 @@
                                                                               LEFT JOIN tbemployee manager on manager.Emp_ID = tbdep.Dep_Manager
                                                                               LEFT JOIN tbemployee employee on employee.Emp_ID = tbdep.UpdatedBy
                                                                               WHERE 
-                                                                                          tbdep.isDeleted = 0
+                                                                                          tbdep.isDeleted = '0'
                                                                               AND  (
                                                                                           tbdep.Dep_ID LIKE :search
                                                                               OR 

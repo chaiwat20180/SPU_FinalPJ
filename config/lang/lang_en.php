@@ -14,6 +14,7 @@
     $alert_site_title = "Confirm alert";
     $alert_site = "Are you sure you want to delete this?";
     $alert_nullData = "Please input data !";
+    $alert_duplicate = "Error duplicate data, The user already exits in group.";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -34,11 +35,13 @@
     $text_menu_Depart_Management = "Department";
     $text_menu_depart_add = "Add / Edit Department";
     $text_menu_site_add = "Add / Edit Site";
-    $text_menu_assigngroup_Management = "AssignGroup";
+    $text_menu_assigngroup_Management = "Group";
+    $text_menu_group_add = "Add / Edit Group";
     $text_menu_assigngroup_add = "Add / Edit Assign Group";
     $text_menu_ticket_Management = "Ticket Management";
     $text_menu_Add_Close_Code = "Add / Edit Close Code";
     $text_menu_Add_Action_Code = "Add / Edit Action Code";
+    $text_menu_Add_category = "Add / Edit Category";
 
     //Content
     $text_add_site = "Add";
@@ -51,6 +54,7 @@
     $text_add_employee= "Manager Site";
     $text_add_employee2 = "Employee";
     $text_add_dep="Depart Name";
+    $text_add_assigngroup_ID ="Group ID";
     $text_add_assigngroup ="Group Name";
     
     //title_button

@@ -58,3 +58,23 @@
       </div>
   </div>
 </div>
+<!-- Modal_duplicate -->
+<div class="modal fade" id="duplicatealert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mb-3 text-center">
+            <img src="asset/image/warning-icon.gif" class="img-thumbnail border-0 clear-shardow resizer-logo150px" alt="" srcset="">
+          </div>
+          <div class="mb-3">
+              <?php echo $alert_duplicate;?>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

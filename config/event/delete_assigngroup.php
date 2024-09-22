@@ -6,7 +6,7 @@ if (isset($_POST['Assign_Group_ID'])) {
 
     error_log("Received POST with siteId: " . $Assign_Group_ID); // Debugging line
     try {
-        $update_isDeleted = $db_connect->prepare("UPDATE tbassign_group SET isDeleted=1 WHERE Assign_Group_ID = :Assign_Group_ID");
+        $update_isDeleted = $db_connect->prepare("UPDATE tbassign_group SET isDeleted='1' WHERE Assign_Group_ID = :Assign_Group_ID");
         $update_isDeleted->bindParam(':Assign_Group_ID', $Assign_Group_ID);
         $update_isDeleted->execute();
 

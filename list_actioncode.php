@@ -44,7 +44,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Site Menu</h1>
+                        <h1>Acction Code Menu</h1>
                      </div>
                   </div>
                </div>
@@ -75,64 +75,23 @@
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                                                         <input type="text" class="form-control" id="inputsitename" name="sitename" placeholder="TH,JP" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_location ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="location" placeholder="Location" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_street ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="street" placeholder="Street" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_city ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="city" placeholder="City" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_province ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="provice" placeholder="Province" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                         <label>Manager</label>
-                                                         <select class="select2" style="width: 100%;"  name="manager">
-                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
-                                                            <?php 
-                                                               $query_all_emp_value = $db_connect->prepare("
+                                                         <label for="Location"><?php echo $text_add_assigngroup ?></label>
+                                                            <select class="select2" style="width: 100%;"  name="group">
+                                                               <?php 
+                                                               $query_all_group_value = $db_connect->prepare("
                                                                   SELECT
-                                                                        Emp_ID ,
-                                                                        Emp_FirstName,
-                                                                        Emp_LastName
+                                                                           *
                                                                   FROM
-                                                                        tbemployee 
+                                                                           tbgroup 
                                                                ");
-                                                               $query_all_emp_value->execute();
-                                                               while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
+                                                               $query_all_group_value->execute();
+                                                                  while ($select_all_group_value = $query_all_group_value->fetch(PDO::FETCH_ASSOC)) {
+                                                               ?>
+                                                               <option value="<?php echo $select_all_group_value['Group_ID']; ?>"><?php echo $select_all_group_value['Group_Name']; ?></option>
+                                                               <?php 
+                                                                  }
+                                                               ?>
+                                                            </select>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -140,7 +99,7 @@
                                           </div>
                                           <div class="modal-footer">
                                              <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="submit" name="addsite" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" name="addassigngroup" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -150,7 +109,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_site.php" method="get">
+                        <form action="/list_assigngroup.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -168,79 +127,77 @@
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>SiteID.</th>
-                                       <th>Site Name.</th>
-                                       <th>Location.</th>
-                                       <th>Street.</th>
-                                       <th>City.</th>
-                                       <th>Province.</th>
-                                       <th>Postal Code.</th>
-                                       <th>Manager Site.</th>
+                                       <th>Assign Group ID.</th>
+                                       <th>Assign Group Name.</th>
+                                       <th>Employee.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
                                  <?php
-                                    $limit_site = 5;
+                                    $limit_ag = 5;
                                     //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
                                     if($page < 1){
                                       $page = 1;
                                     }
                                      //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
-                                    $start = ($page - 1) * $limit_site;
+                                    $start = ($page - 1) * $limit_ag;
                                     //สำหรับ search
                                     $search = isset($_GET['search']) ? $_GET['search'] : '';
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
-                                    $query_all_site = $db_connect->prepare("
+                                    $query_all_ag = $db_connect->prepare("
                                                                               SELECT 
-                                                                                      COUNT(*) 
+                                                                                          COUNT(*) 
                                                                               FROM 
-                                                                                      tbsite
+                                                                                          tbassign_group
                                                                               WHERE 
-                                                                                      isDeleted = '0'
-                                                                              AND  (
-                                                                                      Site_ID LIKE :search
-                                                                              OR 
-                                                                                      Site_Name LIKE :search
-                                                                                    )
+                                                                                          isDeleted = '0'
+                                                                              
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    $query_all_site->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_site->execute();
-                                    $total_records = $query_all_site->fetchColumn();
+                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_ag->execute();
+                                    $total_records = $query_all_ag->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_site);
+                                    $total_pages = ceil($total_records / $limit_ag);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_site = $db_connect->prepare("
-                                                                           SELECT
-                                                                                    tbs.*,
-                                                                                    manager.Emp_GivenName AS site_manager_name,
-                                                                                    employee.Emp_GivenName AS updated_by_name
-                                                                           FROM
-                                                                                    tbsite tbs
-                                                                           LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
-                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
-                                                                           WHERE 
-                                                                                    tbs.isDeleted = '0'
-                                                                           AND  (
-                                                                                    tbs.Site_ID LIKE :search
-                                                                           OR 
-                                                                                    tbs.Site_Name LIKE :search
-                                                                                 )
-                                                                           ORDER BY 
-                                                                                    tbs.Site_ID desc
-                                                                           LIMIT
-                                                                                    :start, :limit_site
+                                    $query_ag = $db_connect->prepare("
+                                                                              SELECT
+                                                                                          tbag.*,
+                                                                                          tbemp.Emp_FirstName as Emp_FirstName,
+                                                                                          tbemp.Emp_LastName as Emp_LastName,
+                                                                                          tbag.CreateDateTime,
+                                                                                          tbg.Group_Name as Group_Name,
+                                                                                          updateby.Emp_FirstName as updateby_FirstName,
+                                                                                          updateby.Emp_LastName as updateby_LastName
+                                                                              FROM
+                                                                                          tbassign_group tbag
+                                                                              LEFT JOIN tbemployee tbemp on tbemp.Emp_ID = tbag.Emp_ID
+                                                                              LEFT JOIN tbemployee updateby on updateby.Emp_ID = tbag.UpdatedBy
+                                                                              LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
+                                                                              WHERE 
+                                                                                          tbag.isDeleted = '0'
+                                                                              AND  (
+                                                                                          tbag.Assign_Group_ID LIKE :search
+                                                                              OR 
+                                                                                          tbemp.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                          tbg.Group_Name LIKE :search
+                                                                                    )
+                                                                              ORDER BY 
+                                                                                          tbag.Assign_Group_ID desc
+                                                                              LIMIT
+                                                                                       :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
-                                    $query_site->bindValue(':search', "%$search%", PDO::PARAM_STR);
-                                    $query_site->bindValue(':start', $start, PDO::PARAM_INT);
-                                    $query_site->bindValue(':limit_site', $limit_site, PDO::PARAM_INT);
-                                    $query_site->execute();
+                                    $query_ag->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_ag->bindValue(':start', $start, PDO::PARAM_INT);
+                                    $query_ag->bindValue(':limit_site', $limit_ag, PDO::PARAM_INT);
+                                    $query_ag->execute();
                                     ?>
                                  <tbody>
                                     <?php 
@@ -250,35 +207,30 @@
                                        else{
                                        ?>
                                     <?php 
-                                       $no_site = 0;
-                                       while ($show_siteData = $query_site->fetch(PDO::FETCH_ASSOC)) {
-                                         $no_site++;
+                                       $no_ag = 0;
+                                       while ($show_agData = $query_ag->fetch(PDO::FETCH_ASSOC)) {
+                                         $no_ag++;
                                        ?>
                                     <tr>
-                                       <td class="align-middle"><?php echo $no_site; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Location']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Street']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['site_manager_name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $no_ag; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Assign_Group_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Group_Name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['Emp_FirstName'] . " " .$show_agData['Emp_LastName'] ; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['CreateDateTime']; ?></td>
+                                       <td class="align-middle"><?php echo $show_agData['updateby_FirstName'] . " " .$show_agData['updateby_LastName'] ; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_site.php?site_id=<?php echo $show_siteData['Site_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_assigngroup.php?dep_id=<?php echo $show_agData['Assign_Group_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
                                              </div>
                                              <div class="col-lg-12 p-2">
-                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
+                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_ag;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
                                              </div>
                                           </div>
-                                          <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                          <div class="modal fade" id="deleteitem<?php echo $no_ag;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                              <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                    <div class="modal-header">
@@ -296,7 +248,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_agData['Assign_Group_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -309,7 +261,7 @@
                                  </tbody>
                               </table>
                               <div class="card-footer clearfix bg-white">
-                                 <form action="/list_site.php" method="get">
+                                 <form action="/list_dep.php" method="get">
                                     <ul class="pagination pagination-sm m-0 float-right">
                                        <!-- Previous Page Link -->
                                        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
@@ -424,6 +376,28 @@
                   });
                }, 3000); // This triggers 3 seconds after the page loads
             }
+            if (operationSuccess === 'duplicatealert') {
+               $('#duplicatealert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#duplicatealert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
             if (operationSuccess === 'error') {
                $('#errorarlert').modal('show');
 
@@ -448,11 +422,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Assign_Group_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_assigngroup.php',
+               data: {Assign_Group_ID: Assign_Group_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
