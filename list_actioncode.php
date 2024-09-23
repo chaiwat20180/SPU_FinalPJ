@@ -189,7 +189,7 @@
                                                                                           tbg.Group_Name LIKE :search
                                                                                     )
                                                                               ORDER BY 
-                                                                                          tbag.Assign_Group_ID desc
+                                                                                          tbag.CreateDateTime desc
                                                                               LIMIT
                                                                                        :start, :limit_site
                                     ");

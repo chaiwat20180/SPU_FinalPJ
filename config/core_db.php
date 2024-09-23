@@ -16,8 +16,11 @@
     include 'event/add_group.php';
     include 'event/edit_group.php';
     include 'event/add_assigngroup.php';
-    include 'event/edit_group.php';
-
+    include 'event/edit_assigngroup.php';
+    include 'event/add_position.php';
+    include 'event/edit_position.php';
+    include 'event/add_status.php';
+    include 'event/edit_status.php';
     //config&query
     include 'config/fetch_userdata.php';
 ?>

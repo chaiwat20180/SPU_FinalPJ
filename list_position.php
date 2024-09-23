@@ -44,7 +44,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Site Menu</h1>
+                        <h1>Positon Menu</h1>
                      </div>
                   </div>
                </div>
@@ -68,71 +68,17 @@
                                        <div class="modal-header">
                                           <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $text_add_site; ?></h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
+                                          <span aria-hidden="true ">&times;</span>
                                           </button>
                                        </div>
                                        <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                                                         <input type="text" class="form-control" id="inputsitename" name="sitename" placeholder="TH,JP" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_location ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="location" placeholder="Location" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_street ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="street" placeholder="Street" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_city ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="city" placeholder="City" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_province ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="provice" placeholder="Province" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
-                                                      </div>
-                                                   </div>
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
-                                                         <label>Manager</label>
-                                                         <select class="select2" style="width: 100%;"  name="manager">
-                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
-                                                            <?php 
-                                                               $query_all_emp_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Emp_ID ,
-                                                                        Emp_FirstName,
-                                                                        Emp_LastName
-                                                                  FROM
-                                                                        tbemployee 
-                                                               ");
-                                                               $query_all_emp_value->execute();
-                                                               while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
+                                                         <label for="Location"><?php echo $text_add_position_name ?></label>
+                                                         <input type="text" class="form-control" id="inputpositionname" name="position" placeholder="Position" required>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -140,7 +86,7 @@
                                           </div>
                                           <div class="modal-footer">
                                              <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="submit" name="addsite" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" name="addposition" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -150,7 +96,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_site.php" method="get">
+                        <form action="/list_position.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -168,79 +114,67 @@
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>SiteID.</th>
-                                       <th>Site Name.</th>
-                                       <th>Location.</th>
-                                       <th>Street.</th>
-                                       <th>City.</th>
-                                       <th>Province.</th>
-                                       <th>Postal Code.</th>
-                                       <th>Manager Site.</th>
+                                       <th>Position ID.</th>
+                                       <th>Position Name.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
                                  <?php
-                                    $limit_site = 5;
+                                    $limit_position = 5;
                                     //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
                                     if($page < 1){
                                       $page = 1;
                                     }
                                      //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
-                                    $start = ($page - 1) * $limit_site;
+                                    $start = ($page - 1) * $limit_position;
                                     //สำหรับ search
                                     $search = isset($_GET['search']) ? $_GET['search'] : '';
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
-                                    $query_all_site = $db_connect->prepare("
+                                    $query_all_position = $db_connect->prepare("
                                                                               SELECT 
-                                                                                      COUNT(*) 
+                                                                                        COUNT(*) 
                                                                               FROM 
-                                                                                      tbsite
+                                                                                        tbposition
                                                                               WHERE 
-                                                                                      isDeleted = '0'
-                                                                              AND  (
-                                                                                      Site_ID LIKE :search
-                                                                              OR 
-                                                                                      Site_Name LIKE :search
-                                                                                    )
+                                                                                        isDeleted = '0'
+                                                                              
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    $query_all_site->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_site->execute();
-                                    $total_records = $query_all_site->fetchColumn();
+                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_position->execute();
+                                    $total_records = $query_all_position->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_site);
+                                    $total_pages = ceil($total_records / $limit_position);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_site = $db_connect->prepare("
-                                                                           SELECT
-                                                                                    tbs.*,
-                                                                                    manager.Emp_GivenName AS site_manager_name,
-                                                                                    employee.Emp_GivenName AS updated_by_name
-                                                                           FROM
-                                                                                    tbsite tbs
-                                                                           LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
-                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
-                                                                           WHERE 
-                                                                                    tbs.isDeleted = '0'
-                                                                           AND  (
-                                                                                    tbs.Site_ID LIKE :search
-                                                                           OR 
-                                                                                    tbs.Site_Name LIKE :search
-                                                                                 )
-                                                                           ORDER BY 
-                                                                                    tbs.CreateDateTime desc
-                                                                           LIMIT
-                                                                                    :start, :limit_site
+                                    $query_position = $db_connect->prepare("
+                                                                              SELECT
+                                                                                          tbp.*,
+                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                              FROM
+                                                                                          tbposition tbp
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbp.UpdatedBy
+                                                                              WHERE 
+                                                                                          tbp.isDeleted = '0'
+                                                                              AND  (
+                                                                                          tbp.Position_ID LIKE :search
+                                                                              OR 
+                                                                                          tbp.Position_name LIKE :search
+                                                                                       )
+                                                                              ORDER BY 
+                                                                                          tbp.CreateDateTime desc
+                                                                              LIMIT
+                                                                                       :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
-                                    $query_site->bindValue(':search', "%$search%", PDO::PARAM_STR);
-                                    $query_site->bindValue(':start', $start, PDO::PARAM_INT);
-                                    $query_site->bindValue(':limit_site', $limit_site, PDO::PARAM_INT);
-                                    $query_site->execute();
+                                    $query_position->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_position->bindValue(':start', $start, PDO::PARAM_INT);
+                                    $query_position->bindValue(':limit_site', $limit_position, PDO::PARAM_INT);
+                                    $query_position->execute();
                                     ?>
                                  <tbody>
                                     <?php 
@@ -250,35 +184,29 @@
                                        else{
                                        ?>
                                     <?php 
-                                       $no_site = 0;
-                                       while ($show_siteData = $query_site->fetch(PDO::FETCH_ASSOC)) {
-                                         $no_site++;
+                                       $no_position = 0;
+                                       while ($show_positionData = $query_position->fetch(PDO::FETCH_ASSOC)) {
+                                         $no_position++;
                                        ?>
                                     <tr>
-                                       <td class="align-middle"><?php echo $no_site; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Location']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Street']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['site_manager_name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $no_position; ?></td>
+                                       <td class="align-middle"><?php echo $show_positionData['Position_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_positionData['Position_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_positionData['CreateDateTime']; ?></td>
+                                       <td class="align-middle"><?php echo $show_positionData['updated_by_name']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_site.php?site_id=<?php echo $show_siteData['Site_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_position.php?position_id=<?php echo $show_positionData['Position_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
                                              </div>
                                              <div class="col-lg-12 p-2">
-                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
+                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_position;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
                                              </div>
                                           </div>
-                                          <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                          <div class="modal fade" id="deleteitem<?php echo $no_position;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                              <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                    <div class="modal-header">
@@ -296,7 +224,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_positionData['Position_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -309,7 +237,7 @@
                                  </tbody>
                               </table>
                               <div class="card-footer clearfix bg-white">
-                                 <form action="/list_site.php" method="get">
+                                 <form action="/list_positionp.php" method="get">
                                     <ul class="pagination pagination-sm m-0 float-right">
                                        <!-- Previous Page Link -->
                                        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
@@ -448,11 +376,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Position_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_position.php',
+               data: {Position_ID: Position_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {

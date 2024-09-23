@@ -11,6 +11,7 @@
             SELECT COUNT(*) AS exist_count
             FROM tbassign_group
             WHERE Emp_ID = :Emp_ID_Assign AND Group_ID = :Group_ID
+            AND IsDeleted ='0'           
         ");
         $check_query->execute([
             ':Emp_ID_Assign' => $employee,

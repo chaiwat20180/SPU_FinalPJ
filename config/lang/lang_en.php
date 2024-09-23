@@ -31,6 +31,7 @@
     $text_menu_admin = "Configuration Menu";
     $text_menu_User_Management = "Employee";
     $text_menu_add_user = "Add / Edit Employee";
+    $text_menu_user_status = "Add / Edit Status";
     $text_menu_position_add = "Add / Edit Position";
     $text_menu_Depart_Management = "Department";
     $text_menu_depart_add = "Add / Edit Department";
@@ -56,6 +57,9 @@
     $text_add_dep="Depart Name";
     $text_add_assigngroup_ID ="Group ID";
     $text_add_assigngroup ="Group Name";
+    $text_add_status ="Status Name";
+    $text_add_employee_name = "Employee Name";
+    $text_add_position_name ="Position Name";
     
     //title_button
     $text_add_new = "Add New";

@@ -215,7 +215,7 @@
                                                                                           tbg.Group_Name LIKE :search
                                                                                     )
                                                                               ORDER BY 
-                                                                                          tbag.Assign_Group_ID desc
+                                                                                          tbag.CreateDateTime desc
                                                                               LIMIT
                                                                                        :start, :limit_site
                                     ");
@@ -247,7 +247,7 @@
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_assigngroup.php?dep_id=<?php echo $show_agData['Assign_Group_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_assigngroup.php?ag_id=<?php echo $show_agData['Assign_Group_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>

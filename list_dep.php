@@ -221,7 +221,7 @@
                                                                                           site.Site_Name LIKE :search
                                                                                        )
                                                                               ORDER BY 
-                                                                                          tbdep.Dep_ID desc
+                                                                                          tbdep.CreateDateTime desc
                                                                               LIMIT
                                                                                        :start, :limit_site
                                     ");
