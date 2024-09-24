@@ -11,7 +11,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item ">
-                        <a href="pages/charts/chartjs.html" class="nav-link pl-4">
+                        <a href="list_employee.php" class="nav-link pl-4">
                             <i class="far fa-edit nav-icon"></i>
                             <p><?php echo $text_menu_add_user ?> </p>
                         </a>

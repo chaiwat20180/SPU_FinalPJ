@@ -165,7 +165,7 @@
          <!-- /.content-wrapper -->
          <!-- Control Sidebar -->
          <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
+            <!-- Control sidebar content goes here -->1
          </aside>
          <!-- /.control-sidebar -->
       </div>
@@ -190,7 +190,7 @@
       <script src="plugins/select2/js/select2.full.min.js"></script>
       <script>
          $(function () {
-           $('.select2').select2({})
+           $(89'.select2').select2({})
          });
       </script>
       <?php include 'component/modal.php'; ?>

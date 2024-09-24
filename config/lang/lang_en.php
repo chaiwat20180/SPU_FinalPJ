@@ -59,6 +59,16 @@
     $text_add_assigngroup ="Group Name";
     $text_add_status ="Status Name";
     $text_add_employee_name = "Employee Name";
+    $text_add_employee_fname = "Fist Name";
+    $text_add_employee_lname = "Last Name";
+    $text_add_employee_givenname = "Given Name";
+    $text_add_employee_email = "E-mail ";
+    $text_add_employee_phone = "Phone ";
+    $text_add_employee_businessphone = "Business Phone ";
+    $text_add_employee_pic = "Profile Picture ";
+    $text_add_employee_status = "Status ";
+    $text_add_employee_position = "Position ";
+    $text_add_employee_department = "Department ";
     $text_add_position_name ="Position Name";
     
     //title_button
