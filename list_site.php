@@ -196,15 +196,28 @@
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_site = $db_connect->prepare("
                                                                               SELECT 
-                                                                                      COUNT(*) 
+                                                                                       COUNT(*),
+                                                                                       tbs.Site_Name AS Site_Name,
+                                                                                       manager.Emp_FirstName AS manager_FirstName,
+                                                                                       manager.Emp_LastName AS manager_LastName,
+                                                                                       employee.Emp_FirstName AS updated_by_FirstName,
+                                                                                       employee.Emp_LastName AS updated_by_LastName
                                                                               FROM 
-                                                                                      tbsite
+                                                                                      tbsite tbs
+                                                                              LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
                                                                               WHERE 
-                                                                                      isDeleted = '0'
+                                                                                      tbs.isDeleted = '0'
                                                                               AND  (
-                                                                                      Site_ID LIKE :search
+                                                                                      tbs.Site_ID LIKE :search
                                                                               OR 
-                                                                                      Site_Name LIKE :search
+                                                                                      tbs.Site_Name LIKE :search
+                                                                              OR 
+                                                                                      tbs.Site_Location LIKE :search
+                                                                              OR
+                                                                                       employee.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                       manager.Emp_FirstName LIKE :search
                                                                                     )
                                     ");
                                     
@@ -218,8 +231,10 @@
                                     $query_site = $db_connect->prepare("
                                                                            SELECT
                                                                                     tbs.*,
-                                                                                    manager.Emp_GivenName AS site_manager_name,
-                                                                                    employee.Emp_GivenName AS updated_by_name
+                                                                                    manager.Emp_FirstName AS manager_FirstName,
+                                                                                    manager.Emp_LastName AS manager_LastName,
+                                                                                    employee.Emp_FirstName AS updated_by_FirstName,
+                                                                                    employee.Emp_LastName AS updated_by_LastName
                                                                            FROM
                                                                                     tbsite tbs
                                                                            LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
@@ -230,6 +245,12 @@
                                                                                     tbs.Site_ID LIKE :search
                                                                            OR 
                                                                                     tbs.Site_Name LIKE :search
+                                                                           OR 
+                                                                                    tbs.Site_Location LIKE :search
+                                                                           OR
+                                                                                    employee.Emp_FirstName LIKE :search
+                                                                           OR
+                                                                                    manager.Emp_FirstName LIKE :search
                                                                                  )
                                                                            ORDER BY 
                                                                                     tbs.CreateDateTime desc
@@ -263,9 +284,9 @@
                                        <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['site_manager_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_siteData['manager_FirstName']." ".$show_siteData['manager_LastName']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_siteData['updated_by_FirstName']." ".$show_siteData['updated_by_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">

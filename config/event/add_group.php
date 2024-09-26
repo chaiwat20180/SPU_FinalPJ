@@ -1,7 +1,8 @@
 <?php
     if(isset($_POST['addgroup'])){
         $Group_Name = $_POST['group'];
-        if($Group_Name ==""){
+        $Group_type = $_POST['grouptype'];
+        if($Group_Name =="" || $Group_type==""){
             $_SESSION['status_insert'] = 'nulldata'; 
             header("location:list_group.php");
         }
@@ -26,6 +27,7 @@
                                                                 (
                                                                     :Group_ID,
                                                                     :Group_Name,
+                                                                    :Group_Admin,
                                                                     NULL,
                                                                     :Emp_ID,
                                                                     NOW(),
@@ -35,6 +37,7 @@
             if ($insert_query->execute([
                 ':Group_ID' => $new_group_id,
                 ':Group_Name' => $Group_Name,
+                ':Group_Admin' => $Group_type,
                 ':Emp_ID' => $_SESSION['Emp_ID']
             ])) {
                 $_SESSION['status_insert'] = 'true'; 
@@ -55,6 +58,7 @@
                                                                 (
                                                                     :Group_ID,
                                                                     :Group_Name,
+                                                                    :Group_Admin,
                                                                     NULL,
                                                                     :Emp_ID,
                                                                     NOW(),
@@ -64,6 +68,7 @@
             if ($insert_query->execute([
                 ':Group_ID' => $new_group_id,
                 ':Group_Name' => $Group_Name,
+                ':Group_Admin' => $Group_type,
                 ':Emp_ID' => $_SESSION['Emp_ID']
             ])) {
                 $_SESSION['status_insert'] = 'true'; 

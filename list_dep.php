@@ -187,14 +187,23 @@
                                                                               SELECT 
                                                                                         COUNT(*) 
                                                                               FROM 
-                                                                                        tbdepartment
+                                                                                        tbdepartment tbd
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbd.UpdatedBy
+                                                                              LEFT JOIN tbemployee manager on manager.Emp_ID = tbd.Dep_Manager
                                                                               WHERE 
-                                                                                        isDeleted = '0'
+                                                                                        tbd.isDeleted = '0'
+                                                                              AND  (
+                                                                                          tbd.Dep_Name LIKE :search
+                                                                              OR 
+                                                                                          employee.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                          manager.Emp_FirstName LIKE :search
+                                                                                       )
                                                                               
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                                     $query_all_dep->execute();
                                     $total_records = $query_all_dep->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
@@ -204,8 +213,10 @@
                                                                               SELECT
                                                                                           tbdep.*,
                                                                                           site.Site_Name AS Site_Name,
-                                                                                          manager.Emp_GivenName AS manager_name,
-                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                                          manager.Emp_FirstName AS manager_FirstName,
+                                                                                          manager.Emp_LastName AS manager_LastName,
+                                                                                          employee.Emp_FirstName AS updated_by_FirstName,
+                                                                                          employee.Emp_LastName AS updated_by_LastName
                                                                               FROM
                                                                                           tbdepartment tbdep
                                                                               LEFT JOIN tbsite site on site.Site_ID = tbdep.Site_ID
@@ -219,6 +230,10 @@
                                                                                           tbdep.Dep_Name LIKE :search
                                                                               OR 
                                                                                           site.Site_Name LIKE :search
+                                                                              OR
+                                                                                          employee.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                          manager.Emp_FirstName LIKE :search
                                                                                        )
                                                                               ORDER BY 
                                                                                           tbdep.CreateDateTime desc
@@ -248,9 +263,9 @@
                                        <td class="align-middle"><?php echo $show_DepData['Dep_ID']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['Dep_Name']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['Site_Name']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_DepData['manager_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_DepData['manager_FirstName']." ".$show_DepData['manager_LastName']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_DepData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_DepData['updated_by_FirstName']." ".$show_DepData['updated_by_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">

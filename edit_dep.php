@@ -28,6 +28,7 @@
       <!-- Site wrapper -->
       <div class="wrapper d-flex flex-column min-vh-100">
          <!-- Navbar -->
+          
          <nav class="main-header navbar navbar-expand navbar-primary navbar-light fixed-top">
             <!-- Left navbar links -->
             <ul class="navbar-nav ">
@@ -51,103 +52,105 @@
                </div>
                <!-- /.container-fluid -->
             </section>
+            
             <!-- Main content -->
             <section class="content">
+               
                <div class="container-fluid p-4 bg-white rounded">
                   <form action="<?php $_SERVER['PHP_SELF'];?>" method="post">
                   <div class="row p-4" >
-                  <div class="container">
-                  <a href="list_dep.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
-                     <div class="row">
-                        <div class="col-lg-6">
-                           <?php
-                              $get_depId = $_GET['dep_id'];
-                              $query_last_data_value = $db_connect->prepare("
-                                 SELECT
-                                       tbemp.Emp_ID ,
-                                       tbemp.Emp_FirstName,
-                                       tbemp.Emp_LastName,
-                                       tbs.Site_ID,
-                                       tbs.Site_Name,
-                                       tbs.Site_Location,
-                                       tbdep.*
-                                 FROM
-                                       tbdepartment tbdep
-                                 LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbdep.Dep_Manager
-                                 LEFT JOIN tbsite tbs ON tbs.Site_ID = tbdep.Site_ID
-                                 WHERE
-                                       tbdep.Dep_ID = :Dep_ID
+                     <div class="container">
+                     <a href="list_dep.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
+                        <div class="row">
+                           <div class="col-lg-6">
+                              <?php
+                                 $get_depId = $_GET['dep_id'];
+                                 $query_last_data_value = $db_connect->prepare("
+                                    SELECT
+                                          tbemp.Emp_ID ,
+                                          tbemp.Emp_FirstName,
+                                          tbemp.Emp_LastName,
+                                          tbs.Site_ID,
+                                          tbs.Site_Name,
+                                          tbs.Site_Location,
+                                          tbdep.*
+                                    FROM
+                                          tbdepartment tbdep
+                                    LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbdep.Dep_Manager
+                                    LEFT JOIN tbsite tbs ON tbs.Site_ID = tbdep.Site_ID
+                                    WHERE
+                                          tbdep.Dep_ID = :Dep_ID
 
-                              ");
-                              $query_last_data_value->bindParam(':Dep_ID', $get_depId);
-                              $query_last_data_value->execute();
-                              $last_data = $query_last_data_value->fetch(PDO::FETCH_ASSOC);
-                           ?>
-                           <div class="form-group">
-                              <label for="Site Name"><?php echo $text_add_dep ?></label>
-                              <input type="text" class="form-control" id="inputdepname" name="depname" placeholder="Dep. Name" value="<?php echo $last_data['Dep_Name']; ?>" required>
+                                 ");
+                                 $query_last_data_value->bindParam(':Dep_ID', $get_depId);
+                                 $query_last_data_value->execute();
+                                 $last_data = $query_last_data_value->fetch(PDO::FETCH_ASSOC);
+                              ?>
+                              <div class="form-group">
+                                 <label for="Site Name"><?php echo $text_add_dep ?></label>
+                                 <input type="text" class="form-control" id="inputdepname" name="depname" placeholder="Dep. Name" value="<?php echo $last_data['Dep_Name']; ?>" required>
+                              </div>
                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_site_location ?></label>
-                              <select class="select2" style="width: 100%;"  name="location">
-                              <option value="<?php echo $last_data['Site_ID']; ?>"><?php echo $last_data['Site_Name']." - ".$last_data['Site_Location']; ?></option>
-                                 <?php 
-                                    $query_all_site_value = $db_connect->prepare("
-                                       SELECT
-                                             Site_ID ,
-                                             Site_Name,
-                                             Site_Location
-                                       FROM
-                                             tbsite 
-                                    ");
-                                    $query_all_site_value->execute();
-                                    while ($select_all_site_value = $query_all_site_value->fetch(PDO::FETCH_ASSOC)) {
-                                 ?>
-                                    <option value="<?php echo $select_all_site_value['Site_ID']; ?>"><?php echo $select_all_site_value['Site_Name']." - ".$select_all_site_value['Site_Location']; ?></option>
-                                 <?php 
-                                    }
-                                 ?>
-                              </select>
+                           <div class="col-lg-6">
+                              <div class="form-group">
+                                 <label for="Location"><?php echo $text_add_site_location ?></label>
+                                 <select class="select2" style="width: 100%;"  name="location">
+                                 <option value="<?php echo $last_data['Site_ID']; ?>"><?php echo $last_data['Site_Name']." - ".$last_data['Site_Location']; ?></option>
+                                    <?php 
+                                       $query_all_site_value = $db_connect->prepare("
+                                          SELECT
+                                                Site_ID ,
+                                                Site_Name,
+                                                Site_Location
+                                          FROM
+                                                tbsite 
+                                       ");
+                                       $query_all_site_value->execute();
+                                       while ($select_all_site_value = $query_all_site_value->fetch(PDO::FETCH_ASSOC)) {
+                                    ?>
+                                       <option value="<?php echo $select_all_site_value['Site_ID']; ?>"><?php echo $select_all_site_value['Site_Name']." - ".$select_all_site_value['Site_Location']; ?></option>
+                                    <?php 
+                                       }
+                                    ?>
+                                 </select>
+                              </div>
                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                           <div class="form-group">
-                              <label>Manager</label>
-                              <select class="select2" style="width: 100%;"  name="manager">
-                              <option value="<?php echo $last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']; ?></option>
-                                 <?php 
-                                    $query_all_emp_value = $db_connect->prepare("
-                                       SELECT
-                                             Emp_ID ,
-                                             Emp_FirstName,
-                                             Emp_LastName
-                                       FROM
-                                             tbemployee 
-                                    ");
-                                    $query_all_emp_value->execute();
-                                 ?>
-                                  <option value="<?php echo $last_data['Emp_ID']?>" selected><?php echo @$last_data['Emp_FirstName']." ".$last_data['Emp_LastName']?></option>
-                                 <?php
-                                    while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
-                                 ?>
-                                    <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
-                                 <?php 
-                                    }
-                                 ?>
-                              </select>
-                              <div class="mt-5 ml-auto">
-                                 <div class="row d-flex justify-content-end">
-                                    <div class="col-sm-12 col-lg-2">
-                                       <button type="submit" name="editdep" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
+                           <div class="col-lg-12">
+                              <div class="form-group">
+                                 <label>Manager</label>
+                                 <select class="select2" style="width: 100%;"  name="manager">
+                                 <option value="<?php echo $last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']." ".$last_data['Emp_FirstName']; ?></option>
+                                    <?php 
+                                       $query_all_emp_value = $db_connect->prepare("
+                                          SELECT
+                                                Emp_ID ,
+                                                Emp_FirstName,
+                                                Emp_LastName
+                                          FROM
+                                                tbemployee 
+                                       ");
+                                       $query_all_emp_value->execute();
+                                    ?>
+                                    <option value="<?php echo $last_data['Emp_ID']?>" selected><?php echo $last_data['Emp_FirstName']." ".$last_data['Emp_LastName']?></option>
+                                    <?php
+                                       while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
+                                    ?>
+                                       <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
+                                    <?php 
+                                       }
+                                    ?>
+                                 </select>
+                                 <div class="mt-5 ml-auto">
+                                    <div class="row d-flex justify-content-end">
+                                       <div class="col-sm-12 col-lg-2">
+                                          <button type="submit" name="editdep" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
                         </div>
                      </div>
-                  </div>
                   </div>
                   </form>
                </div>
@@ -190,7 +193,7 @@
       <script src="plugins/select2/js/select2.full.min.js"></script>
       <script>
          $(function () {
-           $(89'.select2').select2({})
+           $('.select2').select2({})
          });
       </script>
       <?php include 'component/modal.php'; ?>
@@ -247,8 +250,8 @@
              var siteId = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_dep.php',
-               data: {dep_id: depId},
+               url: 'config/event/delete_site.php',
+               data: {site_id: siteId},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {

@@ -135,26 +135,8 @@
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_group= $db_connect->prepare("
-                                                                              SELECT 
-                                                                                        COUNT(*) 
-                                                                              FROM 
-                                                                                        tbemployeestatus
-                                                                              WHERE 
-                                                                                        isDeleted = '0'
-                                                                              
-                                    ");
-                                    
-                                    //หาจำนวนรวมของทั้งหมด
-                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_group->execute();
-                                    $total_records = $query_all_group->fetchColumn();
-                                    //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_group);
-                                    // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_group = $db_connect->prepare("
                                                                               SELECT
-                                                                                          tbs.*,
-                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                                          COUNT(*)
                                                                               FROM
                                                                                           tbemployeestatus tbs
                                                                               LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
@@ -164,6 +146,36 @@
                                                                                           tbs.Status_ID LIKE :search
                                                                               OR 
                                                                                           tbs.Status_Name LIKE :search
+                                                                              OR
+                                                                                          employee.Emp_FirstName LIKE :search
+                                                                                       )
+                                                                              
+                                    ");
+                                    
+                                    //หาจำนวนรวมของทั้งหมด
+                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_group->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_all_group->execute();
+                                    $total_records = $query_all_group->fetchColumn();
+                                    //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
+                                    $total_pages = ceil($total_records / $limit_group);
+                                    // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
+                                    $query_group = $db_connect->prepare("
+                                                                              SELECT
+                                                                                          tbs.*,
+                                                                                          employee.Emp_FirstName AS Emp_FirstName,
+                                                                                          employee.Emp_LastName AS Emp_LastName
+                                                                              FROM
+                                                                                          tbemployeestatus tbs
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
+                                                                              WHERE 
+                                                                                          tbs.isDeleted = '0'
+                                                                              AND  (
+                                                                                          tbs.Status_ID LIKE :search
+                                                                              OR 
+                                                                                          tbs.Status_Name LIKE :search
+                                                                              OR
+                                                                                          employee.Emp_FirstName LIKE :search
                                                                                        )
                                                                               ORDER BY 
                                                                                           tbs.CreateDateTime desc
@@ -193,7 +205,7 @@
                                        <td class="align-middle"><?php echo $show_groupData['Status_ID']; ?></td>
                                        <td class="align-middle"><?php echo $show_groupData['Status_Name']; ?></td>
                                        <td class="align-middle"><?php echo $show_groupData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_groupData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_groupData['Emp_FirstName']." ".$show_groupData['Emp_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">

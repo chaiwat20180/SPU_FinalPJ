@@ -211,7 +211,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_emp.php" method="get">
+                        <form action="/list_employee.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -290,22 +290,28 @@
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
                                     $query_emp = $db_connect->prepare("
                                                                            SELECT
-                                                                                    tbs.*,
-                                                                                    manager.Emp_GivenName AS site_manager_name,
-                                                                                    employee.Emp_GivenName AS updated_by_name
+                                                                                    tbm.*
                                                                            FROM
-                                                                                    tbsite tbs
-                                                                           LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
-                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
+                                                                                    tbemployee tbm
                                                                            WHERE 
-                                                                                    tbs.isDeleted = '0'
+                                                                                    tbm.isDeleted = '0'
                                                                            AND  (
-                                                                                    tbs.Site_ID LIKE :search
+                                                                                    Emp_ID LIKE :search
                                                                            OR 
-                                                                                    tbs.Site_Name LIKE :search
+                                                                                    Emp_FirstName LIKE :search
+                                                                           OR 
+                                                                                    Emp_LastName LIKE :search
+                                                                           OR 
+                                                                                    Emp_GivenName LIKE :search
+                                                                           OR 
+                                                                                    Emp_Email LIKE :search
+                                                                           OR 
+                                                                                    Emp_Phone LIKE :search
+                                                                           OR 
+                                                                                    Emp_Username LIKE :search
                                                                                  )
                                                                            ORDER BY 
-                                                                                    tbs.CreateDateTime desc
+                                                                                    tbm.CreateDateTime desc
                                                                            LIMIT
                                                                                     :start, :limit_site
                                     ");
@@ -318,27 +324,29 @@
                                  <tbody>
                                     <?php 
                                        if($page > $total_pages){
-                                         echo "<tr><td class='align-middle' colspan='12'>Not Found</td></tr>";
+                                         echo "<tr><td class='align-middle' colspan='14'>Not Found</td></tr>";
                                        }
                                        else{
                                        ?>
                                     <?php 
                                        $no_emp = 0;
-                                       while ($show_siteData = $query_emp->fetch(PDO::FETCH_ASSOC)) {
+                                       while ($show_empData = $query_emp->fetch(PDO::FETCH_ASSOC)) {
                                          $no_emp++;
                                        ?>
                                     <tr>
                                        <td class="align-middle"><?php echo $no_emp; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Location']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Street']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['site_manager_name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_Pic']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_FirstName']." ".$show_empData['Emp_LastName']; ?></span></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_GivenName']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_Email']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_Phone']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_BusinessPhone']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Dep_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Position_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Status_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['CreateDateTime']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['UpdatedBy']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">

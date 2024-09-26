@@ -176,16 +176,32 @@
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_ag = $db_connect->prepare("
                                                                               SELECT 
-                                                                                          COUNT(*) 
+                                                                                          COUNT(*),
+                                                                                          tbemp.Emp_FirstName as Emp_FirstName,
+                                                                                          tbemp.Emp_LastName as Emp_LastName,
+                                                                                          tbag.CreateDateTime,
+                                                                                          tbg.Group_Name as Group_Name,
+                                                                                          updateby.Emp_FirstName as updateby_FirstName,
+                                                                                          updateby.Emp_LastName as updateby_LastName
                                                                               FROM 
-                                                                                          tbassign_group
+                                                                                          tbassign_group tbag
+                                                                              LEFT JOIN tbemployee tbemp on tbemp.Emp_ID = tbag.Emp_ID
+                                                                              LEFT JOIN tbemployee updateby on updateby.Emp_ID = tbag.UpdatedBy
+                                                                              LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
                                                                               WHERE 
-                                                                                          isDeleted = '0'
+                                                                                          tbag.isDeleted = '0'
+                                                                              AND  (
+                                                                                          tbag.Assign_Group_ID LIKE :search
+                                                                              OR 
+                                                                                          tbemp.Emp_FirstName LIKE :search
+                                                                              OR
+                                                                                          tbg.Group_Name LIKE :search
+                                                                                    )
                                                                               
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_ag->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                                     $query_all_ag->execute();
                                     $total_records = $query_all_ag->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ

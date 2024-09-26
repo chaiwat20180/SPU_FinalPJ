@@ -135,17 +135,25 @@
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_position = $db_connect->prepare("
-                                                                              SELECT 
-                                                                                        COUNT(*) 
-                                                                              FROM 
-                                                                                        tbposition
-                                                                              WHERE 
-                                                                                        isDeleted = '0'
+                                                                                 SELECT
+                                                                                             COUNT(*)
+                                                                                 FROM
+                                                                                             tbposition tbp
+                                                                                 LEFT JOIN tbemployee employee on employee.Emp_ID = tbp.UpdatedBy
+                                                                                 WHERE 
+                                                                                             tbp.isDeleted = '0'
+                                                                                 AND  (
+                                                                                             tbp.Position_ID LIKE :search
+                                                                                 OR 
+                                                                                             tbp.Position_name LIKE :search
+                                                                                 OR
+                                                                                             employee.Emp_FirstName LIKE :search
+                                                                                       )
                                                                               
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_position->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                                     $query_all_position->execute();
                                     $total_records = $query_all_position->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
@@ -154,7 +162,8 @@
                                     $query_position = $db_connect->prepare("
                                                                               SELECT
                                                                                           tbp.*,
-                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                                          employee.Emp_FirstName AS Emp_FirstName,
+                                                                                          employee.Emp_LastName AS Emp_LastName
                                                                               FROM
                                                                                           tbposition tbp
                                                                               LEFT JOIN tbemployee employee on employee.Emp_ID = tbp.UpdatedBy
@@ -164,6 +173,8 @@
                                                                                           tbp.Position_ID LIKE :search
                                                                               OR 
                                                                                           tbp.Position_name LIKE :search
+                                                                              OR
+                                                                                          employee.Emp_FirstName LIKE :search
                                                                                        )
                                                                               ORDER BY 
                                                                                           tbp.CreateDateTime desc
@@ -193,7 +204,7 @@
                                        <td class="align-middle"><?php echo $show_positionData['Position_ID']; ?></td>
                                        <td class="align-middle"><?php echo $show_positionData['Position_name']; ?></td>
                                        <td class="align-middle"><?php echo $show_positionData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_positionData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_positionData['Emp_FirstName']." ".$show_positionData['Emp_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">

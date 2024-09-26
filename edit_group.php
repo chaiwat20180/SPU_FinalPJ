@@ -83,6 +83,23 @@
                               <label for="Site Name"><?php echo $text_add_assigngroup ?></label>
                               <input type="text" class="form-control" id="inputgroupname" name="group" placeholder="Group. Name" value="<?php echo $last_data['Group_Name']; ?>" required>
                            </div>
+                           <div class="form-group">
+                              <label for="position"><?php echo $text_add_employee_position; ?></label>
+                              <select class="select2" style="width: 100%;"  name="grouptype">
+                                 <option value="<?php echo $last_data['Group_Admin']; ?>">
+                                 <?php 
+                                       if($last_data['Group_Admin'] == '1'){
+                                          echo "Admin";
+                                       }
+                                       else{
+                                          echo "None Admin";
+                                       }
+                                 ?>
+                                 </option>
+                                 <option value="0">None Admin</option>
+                                 <option value="1">Admin</option>
+                               </select>
+                           </div>
                            <div class="mt-5 ml-auto">
                                  <div class="row d-flex justify-content-end">
                                     <div class="col-sm-12 col-lg-2">
@@ -91,6 +108,7 @@
                                  </div>
                               </div>
                         </div>
+                        
                      </div>
                   </div>
                   </div>

@@ -81,6 +81,15 @@
                                                          <input type="text" class="form-control" id="inputgroupname" name="group" placeholder="Group. name" required>
                                                       </div>
                                                    </div>
+                                                   <div class="col-lg-12">
+                                                      <div class="form-group">
+                                                         <label for="Location"><?php echo $text_add_assigngroup ?></label>
+                                                         <select class="select2" style="width: 100%;"  name="grouptype">
+                                                            <option value="0">None Admin</option>
+                                                            <option value="1">Admin</option>
+                                                         </select>
+                                                      </div>
+                                                   </div>
                                                 </div>
                                              </div>
                                           </div>
@@ -116,6 +125,7 @@
                                        <th>No.</th>
                                        <th>Group ID.</th>
                                        <th>Group Name.</th>
+                                       <th>Group Type.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
@@ -136,16 +146,26 @@
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_group= $db_connect->prepare("
                                                                               SELECT 
-                                                                                        COUNT(*) 
+                                                                                        COUNT(*),
+                                                                                        employee.Emp_FirstName AS updated_by_FirstName,
+                                                                                        employee.Emp_LastName AS updated_by_LastName
                                                                               FROM 
-                                                                                        tbgroup
+                                                                                        tbgroup tbg
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbg.UpdatedBy
                                                                               WHERE 
-                                                                                        isDeleted = '0'
+                                                                                       tbg.isDeleted = '0'
+                                                                              AND  (
+                                                                                       tbg.Group_ID LIKE :search
+                                                                              OR 
+                                                                                       tbg.Group_Name LIKE :search
+                                                                              OR
+                                                                                       employee.Emp_FirstName LIKE :search
+                                                                                       )
                                                                               
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    //$query_all_dep->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_group->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                                     $query_all_group->execute();
                                     $total_records = $query_all_group->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
@@ -154,7 +174,8 @@
                                     $query_group = $db_connect->prepare("
                                                                               SELECT
                                                                                           tbg.*,
-                                                                                          employee.Emp_GivenName AS updated_by_name
+                                                                                          employee.Emp_FirstName AS updated_by_FirstName,
+                                                                                          employee.Emp_LastName AS updated_by_LastName
                                                                               FROM
                                                                                           tbgroup tbg
                                                                               LEFT JOIN tbemployee employee on employee.Emp_ID = tbg.UpdatedBy
@@ -164,6 +185,8 @@
                                                                                           tbg.Group_ID LIKE :search
                                                                               OR 
                                                                                           tbg.Group_Name LIKE :search
+                                                                              OR
+                                                                                          employee.Emp_FirstName LIKE :search
                                                                                        )
                                                                               ORDER BY 
                                                                                           tbg.CreateDateTime desc
@@ -192,8 +215,18 @@
                                        <td class="align-middle"><?php echo $no_group; ?></td>
                                        <td class="align-middle"><?php echo $show_groupData['Group_ID']; ?></td>
                                        <td class="align-middle"><?php echo $show_groupData['Group_Name']; ?></td>
+                                       <td class="align-middle">
+                                          <?php 
+                                                if($show_groupData['Group_Admin']=='1'){
+                                                   echo "Admin";
+                                                }
+                                                else{
+                                                   echo "None Admin";
+                                                }
+                                           ?>
+                                       </td>
                                        <td class="align-middle"><?php echo $show_groupData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_groupData['updated_by_name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_groupData['updated_by_FirstName']." ".$show_groupData['updated_by_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
