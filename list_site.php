@@ -108,7 +108,7 @@
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
+                                                         <input type="number" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-12">

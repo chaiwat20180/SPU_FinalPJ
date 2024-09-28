@@ -52,7 +52,15 @@
             <img src="asset/image/warning-icon.gif" class="img-thumbnail border-0 clear-shardow resizer-logo150px" alt="" srcset="">
           </div>
           <div class="mb-3">
-              <?php echo $alert_nullData;?>
+              <?php 
+                      
+                      if(@$_SESSION['custom_alert'] != ""){
+                        echo @$_SESSION['custom_alert'];
+                      }
+                      else{
+                        echo $alert_nullData;
+                      }
+              ?>
           </div>
         </div>
       </div>

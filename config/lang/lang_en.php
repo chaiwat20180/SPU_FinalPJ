@@ -14,6 +14,10 @@
     $alert_site_title = "Confirm alert";
     $alert_site = "Are you sure you want to delete this?";
     $alert_nullData = "Please input data !";
+    $alert_emailduplicate = "E-mail is already exists. Please use new e-mail !";
+    $alert_Emp_GivenName = "GivenName is already exists. Please use new GivenName !";
+    $alert_Username_Duplicate = "Username is already exists. Please use new Username !";
+    $alert_pic_wrong = "Wrong picture type !.Please use .jpg .jpeg or .png files!";
     $alert_duplicate = "Error duplicate data, The user already exits in group.";
 
     //sidebarMenu

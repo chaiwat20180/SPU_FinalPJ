@@ -71,7 +71,7 @@
                                           <span aria-hidden="true">&times;</span>
                                           </button>
                                        </div>
-                                       <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
+                                       <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" >
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
@@ -102,19 +102,19 @@
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="empphone"><?php echo $text_add_employee_phone ?></label>
-                                                         <input type="text" class="form-control" id="inputempphone" name="empphone" placeholder="Phone" required>
+                                                         <input type="number" class="form-control" id="inputempphone" name="empphone" placeholder="Phone">
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
                                                       <div class="form-group">
                                                          <label for="businessphone"><?php echo $text_add_employee_businessphone; ?></label>
-                                                         <input type="text" class="form-control" id="inputempbusinessphone" name="empbusinessphone" placeholder="Business Phone" required>
+                                                         <input type="text" class="form-control" id="inputempbusinessphone" name="empbusinessphone" placeholder="Business Phone" >
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-12">
                                                          <label for="profilepic"><?php echo $text_add_employee_pic; ?></label>
                                                       <div class="form-group custom-file">
-                                                         <input type="file" class="custom-file-input" id="customFile" name="empprofilepic"required>
+                                                         <input type="file" class="custom-file-input" id="customFile" name="emp_pic" accept="image/jpeg, image/png, image/jpg">
                                                          <label class="custom-file-label" for="customFile">Choose file</label>
                                                       </div>
                                                    </div>
@@ -233,6 +233,7 @@
                                        <th>Emp Pic.</th>
                                        <th>Emp Name.</th>
                                        <th>Emp Givename.</th>
+                                       <th>Emp Username.</th>
                                        <th>Emp Email.</th>
                                        <th>Emp Phone.</th>
                                        <th>Emp Businessphone.</th>
@@ -290,25 +291,35 @@
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
                                     $query_emp = $db_connect->prepare("
                                                                            SELECT
-                                                                                    tbm.*
+                                                                                    tbm.*,
+                                                                                    tbd.Dep_Name as emp_dep,
+                                                                                    tbp.Position_name as emp_position,
+                                                                                    tbs.Status_Name as emp_status
                                                                            FROM
                                                                                     tbemployee tbm
+                                                                           LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
+                                                                           LEFT JOIN tbposition tbp ON tbp.Position_ID = tbm.Position_ID
+                                                                           LEFT JOIN tbemployeestatus tbs ON tbs.Status_ID = tbm.Status_ID
                                                                            WHERE 
                                                                                     tbm.isDeleted = '0'
                                                                            AND  (
-                                                                                    Emp_ID LIKE :search
+                                                                                    tbm.Emp_ID LIKE :search
                                                                            OR 
-                                                                                    Emp_FirstName LIKE :search
+                                                                                    tbm.Emp_FirstName LIKE :search
                                                                            OR 
-                                                                                    Emp_LastName LIKE :search
+                                                                                    tbm.Emp_LastName LIKE :search
                                                                            OR 
-                                                                                    Emp_GivenName LIKE :search
+                                                                                    tbm.Emp_GivenName LIKE :search
                                                                            OR 
-                                                                                    Emp_Email LIKE :search
+                                                                                    tbm.Emp_Email LIKE :search
                                                                            OR 
-                                                                                    Emp_Phone LIKE :search
+                                                                                    tbm.Emp_Phone LIKE :search
                                                                            OR 
-                                                                                    Emp_Username LIKE :search
+                                                                                    tbm.Emp_Username LIKE :search
+                                                                           OR
+                                                                                    tbp.Position_name LIKE :search
+                                                                           OR
+                                                                                    tbs.Status_Name LIKE :search
                                                                                  )
                                                                            ORDER BY 
                                                                                     tbm.CreateDateTime desc
@@ -336,15 +347,18 @@
                                     <tr>
                                        <td class="align-middle"><?php echo $no_emp; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Emp_Pic']; ?></td>
+                                       <td class="align-middle">
+                                          <img src="../asset/emp_pic/<?php echo $show_empData['Emp_Pic']; ?>" alt="emp_pic"  class="img-thumbnail">
+                                       </td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_FirstName']." ".$show_empData['Emp_LastName']; ?></span></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_GivenName']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['Emp_Username']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Email']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Phone']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_BusinessPhone']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Dep_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Position_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Status_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['emp_dep']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['emp_position']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['emp_status']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['CreateDateTime']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['UpdatedBy']; ?></td>
                                        <td>

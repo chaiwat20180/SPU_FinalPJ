@@ -21,6 +21,10 @@
     include 'event/edit_position.php';
     include 'event/add_status.php';
     include 'event/edit_status.php';
+    include 'event/add_employee.php';
+
+
+    
     //config&query
     include 'config/fetch_userdata.php';
 ?>

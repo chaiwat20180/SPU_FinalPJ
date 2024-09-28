@@ -20,7 +20,6 @@
         $result = $check_query->fetch(PDO::FETCH_ASSOC);
 
         if ($result['exist_count'] > 0) {
-            // Redirect with an error message if the combination exists
             $_SESSION['status_insert'] = 'duplicatealert'; 
             header("location:list_assigngroup.php");
             exit;
