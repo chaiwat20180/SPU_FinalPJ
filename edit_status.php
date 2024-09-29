@@ -84,12 +84,12 @@
                               <input type="text" class="form-control" id="inputstatuspname" name="statusname" placeholder="Status. Name" value="<?php echo $last_data['Status_Name']; ?>" required>
                            </div>
                            <div class="mt-5 ml-auto">
-                                 <div class="row d-flex justify-content-end">
-                                    <div class="col-sm-12 col-lg-2">
-                                       <button type="submit" name="editstatus" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
-                                    </div>
+                              <div class="row d-flex justify-content-end">
+                                 <div class="col-sm-12 col-lg-2">
+                                    <button type="submit" name="editstatus" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
                                  </div>
                               </div>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -149,6 +149,50 @@
                // Set a timeout to hide the modal after 2 seconds
                setTimeout(function() {
                   $('#successarlert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
+            if (operationSuccess === 'nulldata') {
+               $('#nullalert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#nullalert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
+            if (operationSuccess === 'duplicatealert') {
+               $('#duplicatealert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#duplicatealert').modal('hide');
                }, 2000);
 
                // Set another timeout to clear the session 1 second after the modal closes

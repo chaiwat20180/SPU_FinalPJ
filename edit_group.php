@@ -183,6 +183,50 @@
                   });
                }, 3000); // This triggers 3 seconds after the page loads
             }
+            if (operationSuccess === 'nulldata') {
+               $('#nullalert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#nullalert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
+            if (operationSuccess === 'duplicatealert') {
+               $('#duplicatealert').modal('show');
+
+               // Set a timeout to hide the modal after 2 seconds
+               setTimeout(function() {
+                  $('#duplicatealert').modal('hide');
+               }, 2000);
+
+               // Set another timeout to clear the session 1 second after the modal closes
+               setTimeout(function() {
+                  $.ajax({
+                        url: 'unset_session.php', 
+                        type: 'POST',
+                        success: function(response) {
+                           console.log('Session cleared:', response);
+                        },
+                        error: function() {
+                           console.log('Error unsetting the session variable.'); 
+                        }
+                  });
+               }, 3000); // This triggers 3 seconds after the page loads
+            }
             if (operationSuccess === 'error') {
                $('#errorarlert').modal('show');
 

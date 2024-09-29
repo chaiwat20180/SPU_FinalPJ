@@ -1,6 +1,6 @@
 <?php
    include 'config/core_db.php';
-   if(@$_SESSION['Emp_ID'] != "" && $_GET['ag_id'] != ""){
+   if(@$_SESSION['Emp_ID'] != "" && $_GET['action_code'] != ""){
    ?>
    
 <!DOCTYPE html>
@@ -45,7 +45,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Assign Group Menu</h1>
+                        <h1>Action Code Menu</h1>
                      </div>
                   </div>
                </div>
@@ -56,82 +56,49 @@
                <div class="container-fluid p-4 bg-white rounded">
                   <form action="<?php $_SERVER['PHP_SELF'];?>" method="post">
                   <div class="row p-4" >
-                  <div class="container">
-                  <a href="list_assigngroup.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
-                     <div class="row d-flex justify-content-center">
-                        <div class="col-lg-6">
-                           <?php
-                              $get_agId = $_GET['ag_id'];
-                              $query_last_data_value_edit = $db_connect->prepare("
-                                 SELECT
-                                             tbag.*,
-                                             tbemp.Emp_ID as Emp_ID,
-                                             tbemp.Emp_FirstName as Emp_FirstName,
-                                             tbemp.Emp_LastName as Emp_LastName
-                                 FROM
-                                             tbassign_group tbag
-                                 LEFT JOIN 
-                                             tbemployee tbemp ON tbemp.Emp_ID = tbag.Emp_ID
-                                 WHERE
-                                             tbag.Assign_Group_ID   = :Assign_Group_ID  
-
-                              ");
-                              $query_last_data_value_edit->bindParam(':Assign_Group_ID', $get_agId);
-                              $query_last_data_value_edit->execute();
-                              $last_dataedit = $query_last_data_value_edit->fetch(PDO::FETCH_ASSOC);
-                           ?>
-                           <div class="form-group">
-                              <label for="Employee Name"><?php echo $text_add_employee_name; ?></label>
-                              <input type="hidden" class="form-control" id="groupID" name="employe_id" value="<?php echo $last_dataedit['Emp_ID']; ?>">
-                              <input type="text" class="form-control" id="groupID" name="employe" value="<?php echo $last_dataedit['Emp_FirstName']." ".$last_dataedit['Emp_LastName']; ?>" disabled>
-                           </div>
-                           <div class="form-group">
-                              <label for="Location"><?php echo $text_add_assigngroup ?></label>
-                              <select class="select2" style="width: 100%;"  name="assigngroup">
-                                    <?php
-                                       $get_agId = $_GET['ag_id'];
-                                       $query_last_data_value = $db_connect->prepare("
-                                          SELECT
-                                                tbag.*,
-                                                tbg.Group_Name as Group_Name
-                                          FROM
-                                                tbassign_group tbag
-                                          LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
-                                          WHERE
-                                                tbag.Assign_Group_ID  = :Assign_Group_ID 
-
-                                    ");
-                                    $query_last_data_value->bindParam(':Assign_Group_ID', $get_agId);
-                                    $query_last_data_value->execute();
-                                    $last_data = $query_last_data_value->fetch(PDO::FETCH_ASSOC);
-                                 ?>
-                                 <option value="<?php echo $last_data['Group_ID']; ?>" selected><?php echo $last_data['Group_Name']; ?></option>
-                                 <?php 
-                                 $query_all_group_value = $db_connect->prepare("
+                     <div class="container">
+                        <a href="list_closecode.php" class="btn btn-danger mb-4"><i class="fas fa-reply"></i> Back</a>
+                        <div class="row d-flex justify-content-center">
+                           <div class="col-lg-6">
+                              <?php
+                                 $action_code = $_GET['action_code'];
+                                 $query_last_data_value = $db_connect->prepare("
                                     SELECT
-                                             *
+                                          tbemp.Emp_ID ,
+                                          tbemp.Emp_FirstName,
+                                          tbemp.Emp_LastName,
+                                          tbac.*
                                     FROM
-                                             tbgroup 
+                                          tbaction_code tbac
+                                    LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbac.UpdatedBy
+                                    WHERE
+                                          tbac.Action_Code_ID  = :Action_Code_ID
+
                                  ");
-                                 $query_all_group_value->execute();
-                                    while ($select_all_group_value = $query_all_group_value->fetch(PDO::FETCH_ASSOC)) {
-                                 ?>
-                                 <option value="<?php echo $select_all_group_value['Group_ID']; ?>"><?php echo $select_all_group_value['Group_Name']; ?></option>
-                                 <?php 
-                                    }
-                                 ?>
-                              </select>                              
-                           </div>
-                           <div class="mt-5 ml-auto">
-                                 <div class="row d-flex justify-content-end">
-                                    <div class="col-sm-12 col-lg-2">
-                                       <button type="submit" name="editag" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
+                                 $query_last_data_value->bindParam(':Action_Code_ID', $action_code);
+                                 $query_last_data_value->execute();
+                                 $last_data = $query_last_data_value->fetch(PDO::FETCH_ASSOC);
+                              ?>
+                              <div class="form-group">
+                                 <label for="Site Name"><?php echo $text_add_close_code_id ?></label>
+                                 <input type="text" class="form-control" id="closecodeid"  placeholder="Action Code ID" value="<?php echo $last_data['Action_Code_ID']; ?>" disabled>
+                              </div>
+                              <div class="form-group">
+                                 <label for="Location"><?php echo $text_add_close_code_name ?></label>
+                                 <input type="text" class="form-control" id="inputclosecodename" name="action_code_name" placeholder="Location" value="<?php echo $last_data['Action_Code_Name']; ?>" required>
+                              </div>
+                              <div class="form-group">
+                                 <div class="mt-5 ml-auto">
+                                    <div class="row d-flex justify-content-end">
+                                       <div class="col-sm-12 col-lg-2">
+                                          <button type="submit" name="editac" class="btn btn-primary w-100"><i class="far fa-save"></i> <?php echo $text_save ?></button>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
+                           </div>
                         </div>
                      </div>
-                  </div>
                   </div>
                   </form>
                </div>
@@ -272,11 +239,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Action_Code_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_dep.php',
-               data: {dep_id: depId},
+               url: 'config/event/delete_actioncode.php',
+               data: {Action_Code_ID: Action_Code_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
@@ -294,6 +261,6 @@
 <?php 
    }
    else{
-       header("location:list_assigngroup.php");
+       header("location:list_actioncode.php");
    }
    ?>

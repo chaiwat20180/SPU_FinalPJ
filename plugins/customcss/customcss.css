@@ -35,3 +35,34 @@
 .select2-container--default .select2-selection--single {
   z-index: 1051; /* Adjust as needed, ensuring it's higher than other elements */
 }
+
+.fix-table{
+  table-layout:fixed;
+  width:100%;
+}
+.emp_pic{
+  width: 300px;
+}
+.custom-file-label::after{
+  background-color: #4472ef;
+  color: white;
+}
+.custom-file-label:hover{
+  cursor: pointer !important;
+}
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+}
+@media (max-width: 1360px) {
+  .table-responsive-xl {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+  }
+  .emp_pic{
+    max-width: 150px !important; 
+  }
+}

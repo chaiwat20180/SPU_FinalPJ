@@ -63,7 +63,7 @@
                               </button>
                               <!-- Modal -->
                               <div class="modal fade" id="addsite" role="dialog" aria-labelledby="addsite" aria-hidden="true">
-                                 <div class="modal-dialog modal-dialog-centered" role="document">
+                                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="modal-content">
                                        <div class="modal-header">
                                           <h5 class="modal-title" id="exampleModalLongTitle"><?php echo $text_add_site; ?></h5>
@@ -76,124 +76,135 @@
                                              <div class="container">
                                                 <div class="row">
                                                    <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="empfname"><?php echo $text_add_employee_fname ?></label>
-                                                         <input type="text" class="form-control" id="inputempfname" name="empfname" placeholder="First Name" required>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="empfname"><?php echo $text_add_employee_fname ?></label>
+                                                            <input type="text" class="form-control" id="inputempfname" name="empfname" placeholder="First Name" required>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="emplname"><?php echo $text_add_employee_lname ?></label>
+                                                            <input type="text" class="form-control" id="inputemplname" name="emplname" placeholder="Last Name" required>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="empgivenname"><?php echo $text_add_employee_givenname ?></label>
+                                                            <input type="text" class="form-control" id="inputempgivenname" name="empgivenname" placeholder="Given Name" required>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="empemail"><?php echo $text_add_employee_email ?></label>
+                                                            <input type="email" class="form-control" id="inputempemail" name="empemail" placeholder="E-mail" required>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="empphone"><?php echo $text_add_employee_phone ?></label>
+                                                            <input type="number" class="form-control" id="inputempphone" maxlength="10"  name="empphone" placeholder="Phone">
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="businessphone"><?php echo $text_add_employee_businessphone; ?></label>
+                                                            <input type="number" class="form-control" id="inputempbusinessphone" maxlength="10"  name="empbusinessphone" placeholder="Business Phone" >
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                            <label for="profilepic"><?php echo $text_add_employee_pic; ?></label>
+                                                            <label for="profilepic" class="badge badge-danger"><?php echo $text_warning_pic; ?></label>
+                                                         <div class="form-group custom-file">
+                                                            <input type="file" class="custom-file-input" id="customFile" name="emp_pic" accept="image/jpeg, image/png, image/jpg" style="cursor:pointer;" onchange="previewImage(event)">
+                                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                         </div>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="emplname"><?php echo $text_add_employee_lname ?></label>
-                                                         <input type="text" class="form-control" id="inputemplname" name="emplname" placeholder="Last Name" required>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="username"><?php echo $title_user_login; ?></label>
+                                                            <input type="text" class="form-control" id="inputempusername" name="empusername" placeholder="Username" required>
+                                                         </div>
                                                       </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                         <label for="empgivenname"><?php echo $text_add_employee_givenname ?></label>
-                                                         <input type="text" class="form-control" id="inputempgivenname" name="empgivenname" placeholder="Given Name" required>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="password"><?php echo $title_password_login; ?></label>
+                                                            <input type="password" class="form-control" id="inputemppassword" name="emppassword" placeholder="Password" required>
+                                                         </div>
                                                       </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                         <label for="empemail"><?php echo $text_add_employee_email ?></label>
-                                                         <input type="email" class="form-control" id="inputempemail" name="empemail" placeholder="E-mail" required>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                         <label for="position"><?php echo $text_add_employee_department; ?></label>
+                                                            <select class="select2" style="width: 100%;"  name="department">
+                                                               <?php 
+                                                                  $query_all_department_value = $db_connect->prepare("
+                                                                     SELECT
+                                                                           Dep_ID,
+                                                                           Dep_Name
+                                                                     FROM
+                                                                           tbdepartment 
+                                                                  ");
+                                                                  $query_all_department_value->execute();
+                                                                  while ($select_all_department_value = $query_all_department_value->fetch(PDO::FETCH_ASSOC)) {
+                                                               ?>
+                                                                  <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']; ?></option>
+                                                               <?php 
+                                                                  }
+                                                               ?>
+                                                            </select>
+                                                         </div>
                                                       </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="empphone"><?php echo $text_add_employee_phone ?></label>
-                                                         <input type="number" class="form-control" id="inputempphone" name="empphone" placeholder="Phone">
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                            <label for="position"><?php echo $text_add_employee_position; ?></label>
+                                                            <select class="select2" style="width: 100%;"  name="position">
+                                                               <?php 
+                                                                  $query_all_position_value = $db_connect->prepare("
+                                                                     SELECT
+                                                                           Position_ID,
+                                                                           Position_name
+                                                                     FROM
+                                                                           tbposition 
+                                                                  ");
+                                                                  $query_all_position_value->execute();
+                                                                  while ($select_all_position_value = $query_all_position_value->fetch(PDO::FETCH_ASSOC)) {
+                                                               ?>
+                                                                  <option value="<?php echo $select_all_position_value['Position_ID']; ?>"><?php echo $select_all_position_value['Position_name']; ?></option>
+                                                               <?php 
+                                                                  }
+                                                               ?>
+                                                            </select>
+                                                         </div>
                                                       </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="businessphone"><?php echo $text_add_employee_businessphone; ?></label>
-                                                         <input type="text" class="form-control" id="inputempbusinessphone" name="empbusinessphone" placeholder="Business Phone" >
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                         <label for="empstatus"><?php echo $text_add_employee_status; ?></label>
+                                                            <select class="select2" style="width: 100%;"  name="empstatus">
+                                                               <?php 
+                                                                  $query_all_empstatus_value = $db_connect->prepare("
+                                                                     SELECT
+                                                                           Status_ID,
+                                                                           Status_Name
+                                                                     FROM
+                                                                           tbemployeestatus 
+                                                                  ");
+                                                                  $query_all_empstatus_value->execute();
+                                                                  while ($select_all_empstatus_value = $query_all_empstatus_value->fetch(PDO::FETCH_ASSOC)) {
+                                                               ?>
+                                                                  <option value="<?php echo $select_all_empstatus_value['Status_ID']; ?>"><?php echo $select_all_empstatus_value['Status_Name']; ?></option>
+                                                               <?php 
+                                                                  }
+                                                               ?>
+                                                            </select>
+                                                         </div>
                                                       </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                         <label for="profilepic"><?php echo $text_add_employee_pic; ?></label>
-                                                      <div class="form-group custom-file">
-                                                         <input type="file" class="custom-file-input" id="customFile" name="emp_pic" accept="image/jpeg, image/png, image/jpg">
-                                                         <label class="custom-file-label" for="customFile">Choose file</label>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6 mt-3">
-                                                      <div class="form-group">
-                                                         <label for="username"><?php echo $title_user_login; ?></label>
-                                                         <input type="text" class="form-control" id="inputempusername" name="empusername" placeholder="Username" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6 mt-3">
-                                                      <div class="form-group">
-                                                         <label for="password"><?php echo $title_password_login; ?></label>
-                                                         <input type="password" class="form-control" id="inputemppassword" name="emppassword" placeholder="Password" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                      <label for="position"><?php echo $text_add_employee_department; ?></label>
-                                                         <select class="select2" style="width: 100%;"  name="department">
-                                                            <?php 
-                                                               $query_all_department_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Dep_ID,
-                                                                        Dep_Name
-                                                                  FROM
-                                                                        tbdepartment 
-                                                               ");
-                                                               $query_all_department_value->execute();
-                                                               while ($select_all_department_value = $query_all_department_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                         <label for="position"><?php echo $text_add_employee_position; ?></label>
-                                                         <select class="select2" style="width: 100%;"  name="position">
-                                                            <?php 
-                                                               $query_all_position_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Position_ID,
-                                                                        Position_name
-                                                                  FROM
-                                                                        tbposition 
-                                                               ");
-                                                               $query_all_position_value->execute();
-                                                               while ($select_all_position_value = $query_all_position_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_position_value['Position_ID']; ?>"><?php echo $select_all_position_value['Position_name']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-12">
-                                                      <div class="form-group">
-                                                      <label for="empstatus"><?php echo $text_add_employee_status; ?></label>
-                                                         <select class="select2" style="width: 100%;"  name="empstatus">
-                                                            <?php 
-                                                               $query_all_empstatus_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Status_ID,
-                                                                        Status_Name
-                                                                  FROM
-                                                                        tbemployeestatus 
-                                                               ");
-                                                               $query_all_empstatus_value->execute();
-                                                               while ($select_all_empstatus_value = $query_all_empstatus_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_empstatus_value['Status_ID']; ?>"><?php echo $select_all_empstatus_value['Status_Name']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
-                                                         </select>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group text-center">
+                                                            <label for="empemail"><?php echo $text_preview_pic ?></label><br>
+                                                            <img id="emp_pic_preview" src="../asset/image/temp_pic.png" class="img-thumbnail emp_pic" style="width: 300px; height: 300px; object-fit: cover;">
+                                                         </div>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -224,24 +235,20 @@
                      </div>
                      <div class="col-12 mt-4">
                         <div class="card">
-                           <div class="card-body table-responsive p-4" >
-                              <table class="table table-head-fixed text-nowrap table-bordered table-hover w-100 text-center">
+                           <div class="card-body p-4" >
+                              <table class="table fix-table  text-nowrap table-bordered table-hover text-center table-responsive-xl">
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>Emp ID.</th>
-                                       <th>Emp Pic.</th>
-                                       <th>Emp Name.</th>
-                                       <th>Emp Givename.</th>
-                                       <th>Emp Username.</th>
-                                       <th>Emp Email.</th>
-                                       <th>Emp Phone.</th>
-                                       <th>Emp Businessphone.</th>
-                                       <th>Department.</th>
+                                       <th>ID.</th>
+                                       <th style="width: 150px !important;">Pic.</th>
+                                       <th>Name.</th>
+                                       <th>Username.</th>
+                                       <th style="width: 150px;">Email.</th>
+                                       <th>Dep.</th>
                                        <th>Position.</th>
                                        <th>Status.</th>
                                        <th>Create Date.</th>
-                                       <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
@@ -259,27 +266,36 @@
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_emp = $db_connect->prepare("
-                                                                              SELECT 
-                                                                                      COUNT(*) 
-                                                                              FROM 
-                                                                                      tbemployee
-                                                                              WHERE 
-                                                                                      isDeleted = '0'
-                                                                              AND  (
-                                                                                      Emp_ID LIKE :search
-                                                                              OR 
-                                                                                      Emp_FirstName LIKE :search
-                                                                              OR 
-                                                                                      Emp_LastName LIKE :search
-                                                                              OR 
-                                                                                      Emp_GivenName LIKE :search
-                                                                              OR 
-                                                                                      Emp_Email LIKE :search
-                                                                              OR 
-                                                                                      Emp_Phone LIKE :search
-                                                                              OR 
-                                                                                      Emp_Username LIKE :search
-                                                                                    )
+                                                                              SELECT
+                                                                                    COUNT(*)
+                                                                           FROM
+                                                                                    tbemployee tbm
+                                                                           LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
+                                                                           LEFT JOIN tbposition tbp ON tbp.Position_ID = tbm.Position_ID
+                                                                           LEFT JOIN tbemployeestatus tbs ON tbs.Status_ID = tbm.Status_ID
+                                                                           WHERE 
+                                                                                    tbm.isDeleted = '0'
+                                                                           AND  (
+                                                                                    tbm.Emp_ID LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_FirstName LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_LastName LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_GivenName LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_Email LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_Phone LIKE :search
+                                                                           OR 
+                                                                                    tbm.Emp_Username LIKE :search
+                                                                           OR
+                                                                                    tbd.Dep_Name LIKE :search
+                                                                           OR
+                                                                                    tbp.Position_name LIKE :search
+                                                                           OR
+                                                                                    tbs.Status_Name LIKE :search
+                                                                                 )
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
@@ -317,6 +333,8 @@
                                                                            OR 
                                                                                     tbm.Emp_Username LIKE :search
                                                                            OR
+                                                                                    tbd.Dep_Name LIKE :search
+                                                                           OR
                                                                                     tbp.Position_name LIKE :search
                                                                            OR
                                                                                     tbs.Status_Name LIKE :search
@@ -335,7 +353,7 @@
                                  <tbody>
                                     <?php 
                                        if($page > $total_pages){
-                                         echo "<tr><td class='align-middle' colspan='14'>Not Found</td></tr>";
+                                         echo "<tr><td class='align-middle' colspan='11'>Not Found</td></tr>";
                                        }
                                        else{
                                        ?>
@@ -348,23 +366,19 @@
                                        <td class="align-middle"><?php echo $no_emp; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_ID']; ?></td>
                                        <td class="align-middle">
-                                          <img src="../asset/emp_pic/<?php echo $show_empData['Emp_Pic']; ?>" alt="emp_pic"  class="img-thumbnail">
+                                          <img src="../asset/emp_pic/<?php echo $show_empData['Emp_Pic']; ?>" alt="emp_pic"  class="img-thumbnail emp_pic">
                                        </td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_FirstName']." ".$show_empData['Emp_LastName']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_empData['Emp_GivenName']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Username']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Email']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Emp_Phone']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['Emp_BusinessPhone']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['emp_dep']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['emp_position']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['emp_status']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['UpdatedBy']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_site.php?site_id=<?php echo $show_siteData['Site_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_employee.php?emp_id=<?php echo $show_empData['Emp_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
@@ -391,7 +405,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_empData['Emp_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -404,7 +418,7 @@
                                  </tbody>
                               </table>
                               <div class="card-footer clearfix bg-white">
-                                 <form action="/list_site.php" method="get">
+                                 <form action="/list_employee.php" method="get">
                                     <ul class="pagination pagination-sm m-0 float-right">
                                        <!-- Previous Page Link -->
                                        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
@@ -547,11 +561,11 @@
             });
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Emp_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_employee.php',
+               data: {Emp_ID: Emp_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
@@ -563,6 +577,14 @@
             });
          });
          });
+         function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+               const output = document.getElementById('emp_pic_preview');
+               output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+         }
       </script>
    </body>
 </html>

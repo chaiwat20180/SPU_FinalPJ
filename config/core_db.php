@@ -22,7 +22,11 @@
     include 'event/add_status.php';
     include 'event/edit_status.php';
     include 'event/add_employee.php';
-
+    include 'event/edit_employee.php';
+    include 'event/add_close_code.php';
+    include 'event/edit_close_code.php';
+    include 'event/add_action_code.php';
+    include 'event/edit_action_code.php';
 
     
     //config&query

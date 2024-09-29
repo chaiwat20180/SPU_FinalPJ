@@ -13,12 +13,13 @@
     $alert_login = "Username or Password is incorrect";
     $alert_site_title = "Confirm alert";
     $alert_site = "Are you sure you want to delete this?";
-    $alert_nullData = "Please input data !";
+    $alert_nullData = "Some data is null Please input data !";
     $alert_emailduplicate = "E-mail is already exists. Please use new e-mail !";
     $alert_Emp_GivenName = "GivenName is already exists. Please use new GivenName !";
     $alert_Username_Duplicate = "Username is already exists. Please use new Username !";
     $alert_pic_wrong = "Wrong picture type !.Please use .jpg .jpeg or .png files!";
     $alert_duplicate = "Error duplicate data, The user already exits in group.";
+    $alert_error_upload_img = "Error update picture. Please contact Admin!.";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -62,6 +63,7 @@
     $text_add_assigngroup_ID ="Group ID";
     $text_add_assigngroup ="Group Name";
     $text_add_status ="Status Name";
+    $text_add_employee_id = "Emp ID ";
     $text_add_employee_name = "Employee Name";
     $text_add_employee_fname = "Fist Name";
     $text_add_employee_lname = "Last Name";
@@ -74,6 +76,13 @@
     $text_add_employee_position = "Position ";
     $text_add_employee_department = "Department ";
     $text_add_position_name ="Position Name";
+    $text_warning_pic = "Use picture size 300 x 300px.";
+    $text_preview_pic = "Preview Picture";
+    $text_change_pic = "Change Picture";
+    $text_add_close_code_id = "Close Code ID";
+    $text_add_close_code_name = "Close Code Name";
+    $text_add_close_code = "Close Code";
+    $text_add_action_code = "Action Code";
     
     //title_button
     $text_add_new = "Add New";

@@ -44,7 +44,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Action Code Menu</h1>
+                        <h1>Close Code Menu</h1>
                      </div>
                   </div>
                </div>
@@ -78,7 +78,7 @@
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
                                                          <label for="CloseCode Name"><?php echo $text_add_close_code ?></label>
-                                                         <input type="text" class="form-control" id="inputactioncode" name="actioncode" placeholder="Name" required>
+                                                         <input type="text" class="form-control" id="inputclosecode" name="closecode" placeholder="Name" required>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -86,7 +86,7 @@
                                           </div>
                                           <div class="modal-footer">
                                              <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="submit" name="addactioncode" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" name="addclosecode" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -96,7 +96,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_actioncode.php" method="get">
+                        <form action="/list_closecode.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -114,78 +114,78 @@
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>Action Code ID.</th>
-                                       <th>Action Code Name.</th>
+                                       <th>Close Code ID.</th>
+                                       <th>Close Code Name.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
                                  <?php
-                                    $limit_ac = 5;
+                                    $limit_cc = 5;
                                     //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
                                     if($page < 1){
                                       $page = 1;
                                     }
                                      //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
-                                    $start = ($page - 1) * $limit_ac;
+                                    $start = ($page - 1) * $limit_cc;
                                     //สำหรับ search
                                     $search = isset($_GET['search']) ? $_GET['search'] : '';
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
-                                    $query_all_ac = $db_connect->prepare("
+                                    $query_all_cc = $db_connect->prepare("
                                                                               SELECT 
                                                                                        COUNT(*),
                                                                                        employee.Emp_LastName AS updated_by_LastName
                                                                               FROM 
-                                                                                      tbaction_code tbac
-                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbac.UpdatedBy
+                                                                                      tbclose_code tbcc
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbcc.UpdatedBy
                                                                               WHERE 
-                                                                                      tbac.isDeleted = '0'
+                                                                                      tbcc.isDeleted = '0'
                                                                               AND  (
-                                                                                      tbac.Action_Code_ID LIKE :search
+                                                                                      tbcc.Close_Code_ID LIKE :search
                                                                               OR 
-                                                                                      tbac.Action_Code_Name LIKE :search
+                                                                                      tbcc.Close_Code_Name LIKE :search
                                                                               OR
                                                                                        employee.Emp_FirstName LIKE :search
                                                                                     )
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    $query_all_ac->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_ac->execute();
-                                    $total_records = $query_all_ac->fetchColumn();
+                                    $query_all_cc->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_cc->execute();
+                                    $total_records = $query_all_cc->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_ac);
+                                    $total_pages = ceil($total_records / $limit_cc);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_ac = $db_connect->prepare("
+                                    $query_cc = $db_connect->prepare("
                                                                            SELECT
-                                                                                    tbac.*,
+                                                                                    tbcc.*,
                                                                                     employee.Emp_FirstName AS updated_by_FirstName,
                                                                                     employee.Emp_LastName AS updated_by_LastName
                                                                            FROM
-                                                                                    tbaction_code tbac
-                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbac.UpdatedBy
+                                                                                    tbclose_code tbcc
+                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbcc.UpdatedBy
                                                                            WHERE 
-                                                                                    tbac.isDeleted = '0'
+                                                                                    tbcc.isDeleted = '0'
                                                                            AND  (
-                                                                                    tbac.Action_Code_ID LIKE :search
+                                                                                    tbcc.Close_Code_ID LIKE :search
                                                                            OR 
-                                                                                    tbac.Action_Code_Name LIKE :search
+                                                                                    tbcc.Close_Code_Name LIKE :search
                                                                            OR
                                                                                     employee.Emp_FirstName LIKE :search
                                                                                  )
                                                                            ORDER BY 
-                                                                                    tbac.CreateDateTime desc
+                                                                                    tbcc.CreateDateTime desc
                                                                            LIMIT
                                                                                     :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
-                                    $query_ac->bindValue(':search', "%$search%", PDO::PARAM_STR);
-                                    $query_ac->bindValue(':start', $start, PDO::PARAM_INT);
-                                    $query_ac->bindValue(':limit_site', $limit_ac, PDO::PARAM_INT);
-                                    $query_ac->execute();
+                                    $query_cc->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_cc->bindValue(':start', $start, PDO::PARAM_INT);
+                                    $query_cc->bindValue(':limit_site', $limit_cc, PDO::PARAM_INT);
+                                    $query_cc->execute();
                                     ?>
                                  <tbody>
                                     <?php 
@@ -196,19 +196,19 @@
                                        ?>
                                     <?php 
                                        $no_cc = 0;
-                                       while ($show_Data = $query_ac->fetch(PDO::FETCH_ASSOC)) {
+                                       while ($show_Data = $query_cc->fetch(PDO::FETCH_ASSOC)) {
                                          $no_cc++;
                                        ?>
                                     <tr>
                                        <td class="align-middle"><?php echo $no_cc; ?></td>
-                                       <td class="align-middle"><?php echo $show_Data['Action_Code_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_Data['Action_Code_Name']; ?></td>
+                                       <td class="align-middle"><?php echo $show_Data['Close_Code_ID']; ?></td>
+                                       <td class="align-middle"><?php echo $show_Data['Close_Code_Name']; ?></td>
                                        <td class="align-middle"><?php echo $show_Data['CreateDateTime']; ?></td>
                                        <td class="align-middle"><?php echo $show_Data['updated_by_FirstName']." ".$show_Data['updated_by_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_actioncode.php?action_code=<?php echo $show_Data['Action_Code_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_closecode.php?close_code=<?php echo $show_Data['Close_Code_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
@@ -235,7 +235,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_Data['Action_Code_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_Data['Close_Code_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -387,11 +387,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var Action_Code_ID = $(event.target).attr('data-id');
+             var Close_Code_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_actioncode.php',
-               data: {Action_Code_ID: Action_Code_ID},
+               url: 'config/event/delete_closecode.php',
+               data: {Close_Code_ID: Close_Code_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
