@@ -28,7 +28,7 @@
         if($query_check_permission_manager -> rowCount() > 0 ){
             $query_count_wait_approve = $db_connect -> prepare("
                                                                 SELECT 
-                                                                        tbt.*
+                                                                        COUNT(tbt.Ticket_ID) as Count_Ticket
                                                                 FROM  
                                                                         tbticket tbt
                                                                 LEFT JOIN tbemployee tbm ON tbm.Emp_ID = tbt.Emp_ID
