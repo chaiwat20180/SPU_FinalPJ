@@ -3,7 +3,7 @@
         $site_id = $_POST['sitename'];
         $department = $_POST['department'];
         $manager = $_POST['manager'];
-        if($site_id == "" || $department =="" || $manager == ""){
+        if($site_id == "" || $department =="" ){
             $_SESSION['status_insert'] = 'nulldata'; 
             header("location:list_dep.php");
         }

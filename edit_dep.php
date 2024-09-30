@@ -119,7 +119,7 @@
                               <div class="form-group">
                                  <label>Manager</label>
                                  <select class="select2" style="width: 100%;"  name="manager">
-                                 <option value="<?php echo $last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']." ".$last_data['Emp_FirstName']; ?></option>
+                                 <option value="<?php echo @$last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']." ".@$last_data['Emp_FirstName']; ?></option>
                                     <?php 
                                        $query_all_emp_value = $db_connect->prepare("
                                           SELECT
@@ -128,6 +128,8 @@
                                                 Emp_LastName
                                           FROM
                                                 tbemployee 
+                                          WHERE
+                                                Emp_Username != 'admin' 
                                        ");
                                        $query_all_emp_value->execute();
                                     ?>

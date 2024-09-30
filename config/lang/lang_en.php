@@ -18,8 +18,10 @@
     $alert_Emp_GivenName = "GivenName is already exists. Please use new GivenName !";
     $alert_Username_Duplicate = "Username is already exists. Please use new Username !";
     $alert_pic_wrong = "Wrong picture type !.Please use .jpg .jpeg or .png files!";
+    $alert_pic_null = "Please upload picture!";
     $alert_duplicate = "Error duplicate data, The user already exits in group.";
     $alert_error_upload_img = "Error update picture. Please contact Admin!.";
+    $alert_error_data = "Wrong data query. Please contact Admin!.";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -83,6 +85,9 @@
     $text_add_close_code_name = "Close Code Name";
     $text_add_close_code = "Close Code";
     $text_add_action_code = "Action Code";
+    $text_add_category_code = "Category ";
+    $text_add_category_des = "Category Description";
+    $text_add_category_type = "Category Type";
     
     //title_button
     $text_add_new = "Add New";

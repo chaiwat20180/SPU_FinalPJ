@@ -372,8 +372,36 @@
                                        <td class="align-middle"><?php echo $show_empData['Emp_Username']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Email']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['emp_dep']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['emp_position']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['emp_status']; ?></td>
+                                       <td class="align-middle">
+                                          <?php 
+                                                switch ($show_empData['emp_position']) {
+                                                   case 'Employee':
+                                                      echo "<span class='badge badge-success'>".$show_empData['emp_position']."</span>";
+                                                      break;
+                                                   case 'Manager':
+                                                      echo "<span class='badge badge-danger'>".$show_empData['emp_position']."</span>";
+                                                      break;
+                                                   default:
+                                                      echo "<span class='badge badge-primary'>".$show_empData['emp_position']."</span>";
+                                                      break;
+                                                }
+                                          ?>   
+                                       </td>
+                                       <td class="align-middle">
+                                          <?php 
+                                                switch ($show_empData['emp_status']) {
+                                                   case 'Active':
+                                                      echo "<span class='badge badge-success'>".$show_empData['emp_status']."</span>";
+                                                      break;
+                                                   case 'Disable':
+                                                      echo "<span class='badge badge-danger'>".$show_empData['emp_status']."</span>";
+                                                      break;
+                                                   default:
+                                                      echo "<span class='badge badge-warning'>".$show_empData['emp_status']."</span>";
+                                                      break;
+                                                }
+                                          ?>  
+                                       </td>
                                        <td class="align-middle"><?php echo $show_empData['CreateDateTime']; ?></td>
                                        <td>
                                           <div class="row">

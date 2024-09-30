@@ -1,6 +1,6 @@
 <?php
    include 'config/core_db.php';
-   if(@$_SESSION['Emp_ID'] != "" && $_GET['site_id'] != ""){
+   if(@$_SESSION['Emp_ID'] != "" && $_GET['site_id'] != "" ){
    ?>
    
 <!DOCTYPE html>
@@ -126,6 +126,8 @@
                                              Emp_LastName
                                        FROM
                                              tbemployee 
+                                       WHERE
+                                             Emp_Username != 'admin' 
                                     ");
                                     $query_all_emp_value->execute();
                                  ?>

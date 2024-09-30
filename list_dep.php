@@ -106,9 +106,9 @@
                                                    </div>
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
-                                                        <label for="Location"><?php echo $text_add_employee ?></label>
+                                                        <label for="Location"><?php echo @$text_add_employee ?></label>
                                                         <select class="select2" style="width: 100%;"  name="manager">
-                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
+                                                            <option value="<?php echo @$user_data['Emp_ID']?>" selected><?php echo @$user_data['Emp_FirstName']." ".@$user_data['Emp_LastName']?></option>
                                                             <?php 
                                                             $query_all_emp_value = $db_connect->prepare("
                                                                 SELECT
@@ -117,11 +117,13 @@
                                                                         Emp_LastName
                                                                 FROM
                                                                         tbemployee 
+                                                                WHERE
+                                                                        Emp_Username != 'admin' 
                                                             ");
                                                             $query_all_emp_value->execute();
                                                             while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
                                                             ?>
-                                                            <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
+                                                            <option value="<?php echo @$select_all_emp_value['Emp_ID']; ?>"><?php echo @$select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
                                                             <?php 
                                                             }
                                                             ?>

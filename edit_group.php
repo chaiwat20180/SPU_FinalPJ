@@ -1,6 +1,6 @@
 <?php
    include 'config/core_db.php';
-   if(@$_SESSION['Emp_ID'] != "" && $_GET['group_id'] != ""){
+   if(@$_SESSION['Emp_ID'] != "" || $_GET['group_id'] != "" || $_GET['group_id'] != "G0"){
    ?>
    
 <!DOCTYPE html>
@@ -88,16 +88,23 @@
                               <select class="select2" style="width: 100%;"  name="grouptype">
                                  <option value="<?php echo $last_data['Group_Admin']; ?>">
                                  <?php 
-                                       if($last_data['Group_Admin'] == '1'){
+                                       if($last_data['Group_Admin'] == '0'){
+                                          echo "None Admin";
+                                       }
+                                       elseif($last_data['Group_Admin'] == '1'){
                                           echo "Admin";
                                        }
+                                       elseif($last_data['Group_Admin'] == '2'){
+                                          echo "Super Admin";
+                                       }
                                        else{
-                                          echo "None Admin";
+                                          echo "Error";
                                        }
                                  ?>
                                  </option>
                                  <option value="0">None Admin</option>
                                  <option value="1">Admin</option>
+                                 <option value="2">Super Admin</option>
                                </select>
                            </div>
                            <div class="mt-5 ml-auto">

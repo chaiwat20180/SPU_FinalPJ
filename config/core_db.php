@@ -27,6 +27,7 @@
     include 'event/edit_close_code.php';
     include 'event/add_action_code.php';
     include 'event/edit_action_code.php';
+    include 'event/add_category.php';
 
     
     //config&query

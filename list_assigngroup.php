@@ -293,6 +293,7 @@
                                                          <a class="btn btn-danger delete-btn" data-id="<?php echo $show_agData['Assign_Group_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
+                                                   <?php  ?>
                                                 </div>
                                              </div>
                                              </div>

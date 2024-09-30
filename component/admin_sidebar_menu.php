@@ -1,3 +1,29 @@
+<?php
+
+        $query_check_permission_admin = $db_connect -> prepare("
+                                                                SELECT  
+                                                                        tbm.Emp_ID,
+                                                                        tbag.Group_ID,
+                                                                        tbg.Group_Name as Group_Name
+                                                                FROM
+                                                                        tbemployee tbm
+                                                                INNER  JOIN tbassign_group tbag ON tbag.Emp_ID = tbm.Emp_ID
+                                                                INNER  JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
+                                                                WHERE 
+                                                                        tbag.Emp_ID = :Emp_ID
+                                                                AND
+                                                                        tbag.IsDeleted = '0'
+                                                                AND 
+                                                                        tbg.Group_Admin = '2'
+                                                               
+
+                ");
+        $query_check_permission_admin -> bindParam(':Emp_ID', $_SESSION['Emp_ID']);
+        $query_check_permission_admin -> execute();
+        $fetch_check_user_permission_admin = $query_check_permission_admin->fetchAll();
+        if($query_check_permission_admin -> rowCount() > 0 ){
+?>
+            
             <li class="nav-header">
                 <?php echo $text_menu_admin; ?>
             </li>
@@ -98,10 +124,13 @@
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a href="pages/charts/chartjs.html" class="nav-link pl-4">
+                        <a href="list_category.php" class="nav-link pl-4">
                             <i class="far fa-edit nav-icon"></i>
                             <p><?php echo $text_menu_Add_category ?> </p>
                         </a>
                     </li>
                 </ul>
             </li>
+<?php 
+    } 
+?>

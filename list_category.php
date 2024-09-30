@@ -44,7 +44,7 @@
                <div class="container-fluid">
                   <div class="row mb-2">
                      <div class="col-sm-12">
-                        <h1>Site Menu</h1>
+                        <h1>Ticket Category Menu</h1>
                      </div>
                   </div>
                </div>
@@ -71,69 +71,45 @@
                                           <span aria-hidden="true">&times;</span>
                                           </button>
                                        </div>
-                                       <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
+                                       
+                                       <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" name="categoryinput">
                                           <div class="modal-body">
                                              <div class="container">
                                                 <div class="row">
-                                                   <div class="col-lg-6">
+                                                   <div class="col-lg-12">
                                                       <div class="form-group">
-                                                         <label for="Site Name"><?php echo $text_add_site_name ?></label>
-                                                         <input type="text" class="form-control" id="inputsitename" name="sitename" placeholder="TH,JP" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_location ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="location" placeholder="Location" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_street ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="street" placeholder="Street" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_city ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="city" placeholder="City" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_province ?></label>
-                                                         <input type="text" class="form-control" id="inputlocation" name="provice" placeholder="Province" required>
-                                                      </div>
-                                                   </div>
-                                                   <div class="col-lg-6">
-                                                      <div class="form-group">
-                                                         <label for="Location"><?php echo $text_add_site_postcode ?></label>
-                                                         <input type="number" class="form-control" id="inputlocation" name="postcode" placeholder="Post Code" required>
+                                                         <label for="Category Name"><?php echo $text_add_category_code ?></label>
+                                                         <input type="text" class="form-control" id="inputactioncode" name="category" placeholder="Name" required>
                                                       </div>
                                                    </div>
                                                    <div class="col-lg-12">
                                                       <div class="form-group">
-                                                         <label>Manager</label>
-                                                         <select class="select2" style="width: 100%;"  name="manager">
-                                                            <option value="<?php echo $user_data['Emp_ID']?>" selected><?php echo $user_data['Emp_FirstName']." ".$user_data['Emp_LastName']?></option>
-                                                            <?php 
-                                                               $query_all_emp_value = $db_connect->prepare("
-                                                                  SELECT
-                                                                        Emp_ID ,
-                                                                        Emp_FirstName,
-                                                                        Emp_LastName
-                                                                  FROM
-                                                                        tbemployee 
-                                                                  WHERE
-                                                                        Emp_Username != 'admin' 
-                                                               ");
-                                                               $query_all_emp_value->execute();
-                                                               while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
-                                                            ?>
-                                                               <option value="<?php echo $select_all_emp_value['Emp_ID']; ?>"><?php echo $select_all_emp_value['Emp_FirstName']." ".$select_all_emp_value['Emp_LastName']; ?></option>
-                                                            <?php 
-                                                               }
-                                                            ?>
+                                                         <label for="profilepic"><?php echo $text_change_pic; ?></label>
+                                                            <label for="profilepic" class="badge badge-danger"><?php echo $text_warning_pic; ?></label>
+                                                         <div class="form-group custom-file">
+                                                            <input type="file" class="custom-file-input" id="customFile" name="category_pic" accept="image/jpeg, image/png, image/jpg" style="cursor:pointer;" onchange="previewImage(event)">
+                                                            <label class="custom-file-label" for="customFile" id="customFileLabel">Choose file</label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-lg-12">
+                                                         <div class="form-group text-center">
+                                                            <label for="empemail"><?php echo $text_preview_pic ?></label><br>
+                                                            <img id="cate_pic_preview" src="../asset/image/temp_cat_pic.png" class="img-thumbnail emp_pic" style="width: 150px; height: 150px; object-fit: cover;">
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12">
+                                                         <div class="form-group">
+                                                               <label for="Textarea"><?php echo $text_add_category_des ?></label>
+                                                               <textarea class="form-control" id="Textarea" name="categoryinput"></textarea>
+                                                         </div>
+                                                      </div>
+                                                   <div class="col-lg-12">
+                                                      <div class="form-group">
+                                                         <label for="Category Name"><?php echo $text_add_category_type ?></label>
+                                                         <select class="select2" style="width: 100%;"  name="categorytype">
+                                                            <option value="0">Incident</option>
+                                                            <option value="1">Service Request</option>
                                                          </select>
                                                       </div>
                                                    </div>
@@ -142,7 +118,7 @@
                                           </div>
                                           <div class="modal-footer">
                                              <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                             <button type="submit" name="addsite" class="btn btn-primary"><?php echo $text_add_site ?></button>
+                                             <button type="submit" name="addcategory" class="btn btn-primary"><?php echo $text_add_site ?></button>
                                           </div>
                                        </form>
                                     </div>
@@ -152,7 +128,7 @@
                         </div>
                      </div>
                      <div class="col-lg-6">
-                        <form action="/list_site.php" method="get">
+                        <form action="/list_category.php" method="get">
                            <div class="input-group">
                               <input type="search" class="form-control form-control-lg" name="search" placeholder="Search">
                               <div class="input-group-append">
@@ -170,138 +146,127 @@
                                  <thead>
                                     <tr class="color-thtd">
                                        <th>No.</th>
-                                       <th>SiteID.</th>
-                                       <th>Site Name.</th>
-                                       <th>Location.</th>
-                                       <th>Street.</th>
-                                       <th>City.</th>
-                                       <th>Province.</th>
-                                       <th>Postal Code.</th>
-                                       <th>Manager Site.</th>
+                                       <th>Category ID.</th>
+                                       <th style="width: 150px !important;">Category Pic.</th>
+                                       <th style="width: 300px !important;">Category Name.</th>
+                                       <th style="width: 300px !important;">Category Description.</th>
+                                       <th>Category Type.</th>
                                        <th>Create Date.</th>
                                        <th>Update By.</th>
                                        <th style="width: 150px;">Edit</th>
                                     </tr>
                                  </thead>
                                  <?php
-                                    $limit_site = 5;
+                                    $limit_cat = 5;
                                     //ตรวจสอบว่ามีการส่งค่า page?= มาหรือยัง ถ้ายังจะเริ่มต้นที่ 1 
                                     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // หน้าปัจจุบัน
                                     if($page < 1){
                                       $page = 1;
                                     }
                                      //สำหรับการดึงข้อมูลในหน้าเพจปัจจุบันโดยจะเริ่มรายการไหนเช่น หน้า2 ก็เริ่มรายการที่ 11-20 โดอิงจาก limit_site
-                                    $start = ($page - 1) * $limit_site;
+                                    $start = ($page - 1) * $limit_cat;
                                     //สำหรับ search
                                     $search = isset($_GET['search']) ? $_GET['search'] : '';
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
-                                    $query_all_site = $db_connect->prepare("
+                                    $query_all_cat = $db_connect->prepare("
                                                                               SELECT 
                                                                                        COUNT(*),
-                                                                                       tbs.Site_Name AS Site_Name,
-                                                                                       manager.Emp_FirstName AS manager_FirstName,
-                                                                                       manager.Emp_LastName AS manager_LastName,
-                                                                                       employee.Emp_FirstName AS updated_by_FirstName,
                                                                                        employee.Emp_LastName AS updated_by_LastName
                                                                               FROM 
-                                                                                      tbsite tbs
-                                                                              LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
-                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
+                                                                                      tbcategory tbc
+                                                                              LEFT JOIN tbemployee employee on employee.Emp_ID = tbc.UpdatedBy
                                                                               WHERE 
-                                                                                      tbs.isDeleted = '0'
+                                                                                      tbc.isDeleted = '0'
                                                                               AND  (
-                                                                                      tbs.Site_ID LIKE :search
+                                                                                      tbc.Category_ID LIKE :search
                                                                               OR 
-                                                                                      tbs.Site_Name LIKE :search
-                                                                              OR 
-                                                                                      tbs.Site_Location LIKE :search
+                                                                                      tbc.Category_Name LIKE :search
                                                                               OR
                                                                                        employee.Emp_FirstName LIKE :search
-                                                                              OR
-                                                                                       manager.Emp_FirstName LIKE :search
                                                                                     )
                                     ");
                                     
                                     //หาจำนวนรวมของทั้งหมด
-                                    $query_all_site->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-                                    $query_all_site->execute();
-                                    $total_records = $query_all_site->fetchColumn();
+                                    $query_all_cat->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                                    $query_all_cat->execute();
+                                    $total_records = $query_all_cat->fetchColumn();
                                     //คำนวณจำนวนหน้าทั้งหมดแล้วนำมาหารจำนวนรายการต่อหน้า ใช้ ceil ปัดเศษ
-                                    $total_pages = ceil($total_records / $limit_site);
+                                    $total_pages = ceil($total_records / $limit_cat);
                                     // ดึงข้อมูลโดยใช้ LIMIT และ OFFSET
-                                    $query_site = $db_connect->prepare("
+                                    $query_cat = $db_connect->prepare("
                                                                            SELECT
-                                                                                    tbs.*,
-                                                                                    manager.Emp_FirstName AS manager_FirstName,
-                                                                                    manager.Emp_LastName AS manager_LastName,
+                                                                                    tbc.*,
                                                                                     employee.Emp_FirstName AS updated_by_FirstName,
                                                                                     employee.Emp_LastName AS updated_by_LastName
                                                                            FROM
-                                                                                    tbsite tbs
-                                                                           LEFT JOIN tbemployee manager on manager.Emp_ID = tbs.Site_Manager
-                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbs.UpdatedBy
+                                                                                    tbcategory tbc
+                                                                           LEFT JOIN tbemployee employee on employee.Emp_ID = tbc.UpdatedBy
                                                                            WHERE 
-                                                                                    tbs.isDeleted = '0'
+                                                                                    tbc.isDeleted = '0'
                                                                            AND  (
-                                                                                    tbs.Site_ID LIKE :search
+                                                                                    tbc.Category_ID LIKE :search
                                                                            OR 
-                                                                                    tbs.Site_Name LIKE :search
-                                                                           OR 
-                                                                                    tbs.Site_Location LIKE :search
+                                                                                    tbc.Category_Name LIKE :search
                                                                            OR
                                                                                     employee.Emp_FirstName LIKE :search
-                                                                           OR
-                                                                                    manager.Emp_FirstName LIKE :search
                                                                                  )
                                                                            ORDER BY 
-                                                                                    tbs.CreateDateTime desc
+                                                                                    tbc.CreateDateTime desc
                                                                            LIMIT
                                                                                     :start, :limit_site
                                     ");
                                     //ป้องกัน SQL injection
-                                    $query_site->bindValue(':search', "%$search%", PDO::PARAM_STR);
-                                    $query_site->bindValue(':start', $start, PDO::PARAM_INT);
-                                    $query_site->bindValue(':limit_site', $limit_site, PDO::PARAM_INT);
-                                    $query_site->execute();
+                                    $query_cat->bindValue(':search', "%$search%", PDO::PARAM_STR);
+                                    $query_cat->bindValue(':start', $start, PDO::PARAM_INT);
+                                    $query_cat->bindValue(':limit_site', $limit_cat, PDO::PARAM_INT);
+                                    $query_cat->execute();
                                     ?>
                                  <tbody>
                                     <?php 
                                        if($page > $total_pages){
-                                         echo "<tr><td class='align-middle' colspan='12'>Not Found</td></tr>";
+                                         echo "<tr><td class='align-middle' colspan='9'>Not Found</td></tr>";
                                        }
                                        else{
                                        ?>
                                     <?php 
-                                       $no_site = 0;
-                                       while ($show_siteData = $query_site->fetch(PDO::FETCH_ASSOC)) {
-                                         $no_site++;
+                                       $no_cat = 0;
+                                       while ($show_Data = $query_cat->fetch(PDO::FETCH_ASSOC)) {
+                                         $no_cat++;
                                        ?>
                                     <tr>
-                                       <td class="align-middle"><?php echo $no_site; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_ID']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Name']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Location']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Street']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['manager_FirstName']." ".$show_siteData['manager_LastName']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['updated_by_FirstName']." ".$show_siteData['updated_by_LastName']; ?></td>
+                                       <td class="align-middle"><?php echo $no_cat; ?></td>
+                                       <td class="align-middle"><?php echo $show_Data['Category_ID']; ?></td>
+                                       <td class="align-middle">
+                                          <img src="../asset/category_pic/<?php echo $show_Data['Category_Pic']; ?>" alt="category_pic"  class="img-thumbnail emp_pic">
+                                       </td>
+                                       <td class="align-middle text-break"><?php echo $show_Data['Category_Name']; ?></td>
+                                       <td class="align-middle text-break"><?php echo $show_Data['Category_Description']; ?></td>
+                                       <td class="align-middle">
+                                          <?php 
+                                             if($show_Data['Category_Type']=="0"){
+                                                echo "<span class='badge badge-danger'>Incident</span>";
+                                             } 
+                                             else{
+                                                echo "<span class='badge badge-success'>Service Request</span>";
+                                             }
+                                          ?>
+                                       </td>
+                                       <td class="align-middle"><?php echo $show_Data['CreateDateTime']; ?></td>
+                                       <td class="align-middle"><?php echo $show_Data['updated_by_FirstName']." ".$show_Data['updated_by_LastName']; ?></td>
                                        <td>
                                           <div class="row">
                                              <div class="col-lg-12 p-2">
-                                                <a class="btn btn-block btn-primary" href="edit_site.php?site_id=<?php echo $show_siteData['Site_ID']; ?>">
+                                                <a class="btn btn-block btn-primary" href="edit_category.php?category_ID =<?php echo $show_Data['Category_ID']; ?>">
                                                    <i class="fas fa-edit"></i>
                                                    <?php echo $text_edit ?>
                                                 </a>
                                              </div>
                                              <div class="col-lg-12 p-2">
-                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_site;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
+                                                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_cat;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
                                              </div>
                                           </div>
-                                          <div class="modal fade" id="deleteitem<?php echo $no_site;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                          <div class="modal fade" id="deleteitem<?php echo $no_cat;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                              <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                    <div class="modal-header">
@@ -319,7 +284,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                          <a class="btn btn-secondary" data-dismiss="modal"><?php echo $text_cancel ?></a>
-                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_siteData['Site_ID']; ?>"><?php echo $text_delete ?></a>
+                                                         <a class="btn btn-danger delete-btn" data-id="<?php echo $show_Data['Category_ID']; ?>"><?php echo $text_delete ?></a>
                                                       </div>
                                                    </div>
                                                 </div>
@@ -332,7 +297,7 @@
                                  </tbody>
                               </table>
                               <div class="card-footer clearfix bg-white">
-                                 <form action="/list_site.php" method="get">
+                                 <form action="/list_category.php" method="get">
                                     <ul class="pagination pagination-sm m-0 float-right">
                                        <!-- Previous Page Link -->
                                        <li class="page-item <?php echo ($page <= 1) ? 'disabled' : ''; ?>">
@@ -471,11 +436,11 @@
             }
             $('.delete-btn').click(function(e) {
             // var siteId = $(this).data('id');
-             var siteId = $(event.target).attr('data-id');
+             var Category_ID = $(event.target).attr('data-id');
             $.ajax({
                type: 'POST',
-               url: 'config/event/delete_site.php',
-               data: {site_id: siteId},
+               url: 'config/event/delete_category.php',
+               data: {Category_ID: Category_ID},
                success: function(response) {
                      const result = JSON.parse(response);
                      if(result.status === 'success') {
@@ -487,6 +452,19 @@
             });
          });
          });
+         function previewImage(event) {
+         const reader = new FileReader();
+         reader.onload = function() {
+            const output = document.getElementById('cate_pic_preview');
+            output.src = reader.result;
+         }
+         reader.readAsDataURL(event.target.files[0]);
+
+         // อัพเดตข้อความของ label เมื่อเลือกไฟล์
+         const fileName = event.target.files[0].name;
+         const label = document.getElementById('customFileLabel');
+         label.textContent = fileName;
+      }
       </script>
    </body>
 </html>

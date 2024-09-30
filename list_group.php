@@ -87,6 +87,7 @@
                                                          <select class="select2" style="width: 100%;"  name="grouptype">
                                                             <option value="0">None Admin</option>
                                                             <option value="1">Admin</option>
+                                                            <option value="2">Super Admin</option>
                                                          </select>
                                                       </div>
                                                    </div>
@@ -217,11 +218,17 @@
                                        <td class="align-middle"><?php echo $show_groupData['Group_Name']; ?></td>
                                        <td class="align-middle">
                                           <?php 
-                                                if($show_groupData['Group_Admin']=='1'){
+                                                if($show_groupData['Group_Admin']=='0'){
+                                                   echo "None Admin";
+                                                }
+                                                elseif($show_groupData['Group_Admin']=='1'){
                                                    echo "Admin";
                                                 }
+                                                elseif($show_groupData['Group_Admin']=='2'){
+                                                   echo "Super Admin";
+                                                }
                                                 else{
-                                                   echo "None Admin";
+                                                   echo "Error";
                                                 }
                                            ?>
                                        </td>
@@ -238,6 +245,7 @@
                                              <div class="col-lg-12 p-2">
                                                 <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deleteitem<?php echo $no_group;?>"><i class="fas fa-trash"></i> <?php echo $text_delete ?></button>
                                              </div>
+                                             <?php } ?>
                                           </div>
                                           <div class="modal fade" id="deleteitem<?php echo $no_group;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                              <div class="modal-dialog modal-dialog-centered" role="document">
@@ -266,7 +274,7 @@
                                           </div>
                                        </td>
                                     </tr>
-                                    <?php } } ?>
+                                    <?php }  ?>
                                  </tbody>
                               </table>
                               <div class="card-footer clearfix bg-white">
