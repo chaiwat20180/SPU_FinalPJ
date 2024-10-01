@@ -22,6 +22,7 @@
     $alert_duplicate = "Error duplicate data, The user already exits in group.";
     $alert_error_upload_img = "Error update picture. Please contact Admin!.";
     $alert_error_data = "Wrong data query. Please contact Admin!.";
+    $alert_success_request = "Request Success";
 
     //sidebarMenu
     $text_Menu = "Menu";
@@ -88,7 +89,15 @@
     $text_add_category_code = "Category ";
     $text_add_category_des = "Category Description";
     $text_add_category_type = "Category Type";
-    
+    $text_request_for = "Request for ";
+    $text_request_priority = "Priority";
+    $text_request_Description = "Description ";
+    $text_request_Manager = "Manager ";
+    $text_request_customer = "Customer ";
+    $text_request_AdditionalComment = "AdditionalComment ";
+
+
+
     //title_button
     $text_add_new = "Add New";
     $text_edit = "Edit";

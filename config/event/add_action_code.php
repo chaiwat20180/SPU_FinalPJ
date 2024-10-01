@@ -39,7 +39,7 @@
                 ':Emp_ID' => $_SESSION['Emp_ID']
             ])) {
                 $_SESSION['status_insert'] = 'true'; 
-                header("location:list_actioncode.php");
+                header("location:homepage.php");
             } else {
                 $_SESSION['status_insert'] = 'false'; 
                 header("location:list_actioncode.php");
