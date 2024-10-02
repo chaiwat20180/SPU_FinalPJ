@@ -141,15 +141,17 @@
                                                                <?php 
                                                                   $query_all_department_value = $db_connect->prepare("
                                                                      SELECT
-                                                                           Dep_ID,
-                                                                           Dep_Name
+                                                                           tbd.Dep_ID,
+                                                                           tbd.Dep_Name,
+                                                                           tbs.Site_Name as Site_Name
                                                                      FROM
-                                                                           tbdepartment 
+                                                                           tbdepartment  tbd
+                                                                     INNER JOIN tbsite tbs ON tbs.Site_ID = tbd.Site_ID
                                                                   ");
                                                                   $query_all_department_value->execute();
                                                                   while ($select_all_department_value = $query_all_department_value->fetch(PDO::FETCH_ASSOC)) {
                                                                ?>
-                                                                  <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']; ?></option>
+                                                                  <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']. " - ". $select_all_department_value['Site_Name']; ?></option>
                                                                <?php 
                                                                   }
                                                                ?>
@@ -266,13 +268,15 @@
                                     
                                     // คำนวณจำนวนหน้าทั้งหมด
                                     $query_all_emp = $db_connect->prepare("
-                                                                              SELECT
+                                                                           SELECT
                                                                                     COUNT(*)
+                                                                                    
                                                                            FROM
                                                                                     tbemployee tbm
                                                                            LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
                                                                            LEFT JOIN tbposition tbp ON tbp.Position_ID = tbm.Position_ID
                                                                            LEFT JOIN tbemployeestatus tbs ON tbs.Status_ID = tbm.Status_ID
+                                                                           INNER JOIN tbsite  ON tbsite.Site_ID = tbd.Site_ID
                                                                            WHERE 
                                                                                     tbm.isDeleted = '0'
                                                                            AND  (
@@ -293,6 +297,10 @@
                                                                                     tbd.Dep_Name LIKE :search
                                                                            OR
                                                                                     tbp.Position_name LIKE :search
+                                                                           OR
+                                                                                    tbsite.Site_Name LIKE :search
+                                                                           OR
+                                                                                    tbsite.Site_Location LIKE :search
                                                                            OR
                                                                                     tbs.Status_Name LIKE :search
                                                                                  )
@@ -310,12 +318,14 @@
                                                                                     tbm.*,
                                                                                     tbd.Dep_Name as emp_dep,
                                                                                     tbp.Position_name as emp_position,
-                                                                                    tbs.Status_Name as emp_status
+                                                                                    tbs.Status_Name as emp_status,
+                                                                                    tbsite.Site_Name as Site_Name
                                                                            FROM
                                                                                     tbemployee tbm
                                                                            LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
                                                                            LEFT JOIN tbposition tbp ON tbp.Position_ID = tbm.Position_ID
                                                                            LEFT JOIN tbemployeestatus tbs ON tbs.Status_ID = tbm.Status_ID
+                                                                           INNER JOIN tbsite  ON tbsite.Site_ID = tbd.Site_ID
                                                                            WHERE 
                                                                                     tbm.isDeleted = '0'
                                                                            AND  (
@@ -336,6 +346,10 @@
                                                                                     tbd.Dep_Name LIKE :search
                                                                            OR
                                                                                     tbp.Position_name LIKE :search
+                                                                           OR
+                                                                                    tbsite.Site_Name LIKE :search
+                                                                           OR
+                                                                                    tbsite.Site_Location LIKE :search
                                                                            OR
                                                                                     tbs.Status_Name LIKE :search
                                                                                  )
@@ -371,7 +385,7 @@
                                        <td class="align-middle"><?php echo $show_empData['Emp_FirstName']." ".$show_empData['Emp_LastName']; ?></span></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Username']; ?></td>
                                        <td class="align-middle"><?php echo $show_empData['Emp_Email']; ?></td>
-                                       <td class="align-middle"><?php echo $show_empData['emp_dep']; ?></td>
+                                       <td class="align-middle"><?php echo $show_empData['emp_dep']. " - ". $show_empData['Site_Name']; ?></td>
                                        <td class="align-middle">
                                           <?php 
                                                 switch ($show_empData['emp_position']) {

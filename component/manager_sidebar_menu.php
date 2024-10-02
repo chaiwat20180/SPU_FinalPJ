@@ -1,59 +1,53 @@
 <?php
 
         $query_check_permission_manager = $db_connect -> prepare("
-                                                                SELECT  
-                                                                        tbm.Emp_ID,
-                                                                        tbd.*
+                                                                SELECT 
+                                                                                tbemp.Emp_ID,
+                                                                                tbemp.Emp_FirstName ,
+                                                                                tbemp.Emp_LastName,
+                                                                                tbemp.Dep_ID emp_dep,
+                                                                                manager.Dep_ID as manager_dep,
+                                                                                tbd.Dep_Name,
+                                                                                manager.Emp_ID as Manager,
+                                                                                tbg.Group_ID,
+                                                                                tbg.Group_Name,
+                                                                                tbg.Group_Admin
                                                                 FROM
-                                                                        tbemployee tbm
-                                                                LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
-                                                                LEFT JOIN tbassign_group tbag ON tbag.Emp_ID = tbm.Emp_ID
+                                                                                tbemployee tbemp
+                                                                LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbemp.Dep_ID
+                                                                LEFT JOIN tbemployee manager ON manager.Emp_ID = tbd.Dep_Manager	
+                                                                LEFT JOIN tbassign_group tbag ON tbag.Emp_ID = tbemp.Emp_ID
                                                                 LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbag.Group_ID
                                                                 WHERE 
-                                                                        tbm.Emp_ID = :Emp_ID
-                                                                AND
-                                                                        tbm.IsDeleted = '0'
-                                                                AND 
-                                                                    (
-                                                                        tbd.Dep_Manager = :Emp_ID
-                                                                OR 
-                                                                        tbg.Group_Admin = '2'
-                                                                    )
+                                                                            (tbemp.Emp_ID = :Emp_ID AND tbemp.IsDeleted = '0')
+    															OR 
+                                                                			(tbemp.Emp_ID = :Emp_ID AND tbg.Group_Admin = '2');
 
 
                 ");
         $query_check_permission_manager -> bindParam(':Emp_ID', $_SESSION['Emp_ID']);
         $query_check_permission_manager -> execute();
-        $fetch_check_user_permission_manager = $query_check_permission_manager->fetchAll();
-        if($query_check_permission_manager -> rowCount() > 0 ){
+        $fetch_check_user_permission_manager = $query_check_permission_manager->fetch();
+        if(
+                $fetch_check_user_permission_manager['Emp_ID'] == $fetch_check_user_permission_manager['Manager'] || 
+                $fetch_check_user_permission_manager['Group_Admin'] == '2'  &&
+                $fetch_check_user_permission_manager['emp_dep'] == $fetch_check_user_permission_manager['manager_dep']
+        ){ 
             $query_count_wait_approve = $db_connect -> prepare("
-                                                                SELECT 
-                                                                        COUNT(tbt.Ticket_ID) as Count_Ticket
+                                                               SELECT 
+                                                                    COUNT(tbt.Ticket_ID) as Count_Ticket
                                                                 FROM  
-                                                                        tbticket tbt
-                                                                LEFT JOIN tbemployee tbm ON tbm.Emp_ID = tbt.Emp_ID
+                                                                    tbticket tbt
+                                                                LEFT JOIN tbemployee tbemp ON tbemp.Emp_ID = tbt.Emp_ID
+                                                                LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbemp.Dep_ID
+                                                                LEFT JOIN tbemployee manager ON manager.Emp_ID = tbd.Dep_Manager
+                                                                LEFT JOIN tbdepartment managerDept ON managerDept.Dep_ID = manager.Dep_ID
                                                                 LEFT JOIN tbgroup tbg ON tbg.Group_ID = tbt.Group_ID
-                                                                LEFT JOIN tbassign_group tbag ON tbag.Group_ID = tbt.Group_ID
-                                                                LEFT JOIN tbcategory tbc ON tbc.Category_ID = tbt.Category_ID
-                                                                LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbm.Dep_ID
-                                                                WHERE 
-                                                                    tbt.State_ID = 'ST06'
-                                                                AND
-                                                                    tbc.Category_Type = '1'
-                                                                AND (
-                                                                    tbt.Group_ID IN (
-                                                                        SELECT Group_ID 
-                                                                        FROM tbassign_group 
-                                                                        WHERE Emp_ID = :Emp_ID
-                                                                    )
-                                                                    OR
-                                                                    tbm.Dep_ID = (
-                                                                        SELECT Dep_ID 
-                                                                        FROM tbemployee 
-                                                                        WHERE Emp_ID = :Emp_ID
-                                                                    )
-                                                                        )
-                                                                
+                                                                LEFT JOIN tbassign_group tbag ON tbag.Group_ID = tbg.Group_ID
+
+                                                                WHERE
+                                                                        manager.Emp_ID = :Emp_ID
+
 
 
                 ");

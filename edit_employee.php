@@ -71,12 +71,14 @@
                                              tbemp.* ,
                                              tbd.Dep_Name as Dep_Name,
                                              tbp.Position_Name as Positon_Name,
-                                             tbs.Status_Name as Status_Name
+                                             tbs.Status_Name as Status_Name,
+                                             tbsite.Site_Name as Site_Name
                                        FROM
                                              tbemployee tbemp
                                        LEFT JOIN tbdepartment tbd ON tbd.Dep_ID = tbemp.Dep_ID
                                        LEFT JOIN tbposition tbp ON tbp.Position_ID = tbemp.Position_ID
                                        LEFT JOIN tbemployeestatus tbs ON tbs.Status_ID = tbemp.Status_ID
+                                       INNER JOIN tbsite ON tbsite.Site_ID = tbd.Site_ID
                                        WHERE
                                              tbemp.Emp_ID = :Emp_ID
 
@@ -152,19 +154,21 @@
                                  <div class="form-group">
                                  <label for="position"><?php echo $text_add_employee_department; ?></label>
                                     <select class="select2" style="width: 100%;"  name="department">
-                                    <option value="<?php echo $last_data['Dep_ID']; ?>" selected><?php echo $last_data['Dep_Name']; ?></option>
+                                    <option value="<?php echo $last_data['Dep_ID']; ?>" selected><?php echo $last_data['Dep_Name']. " - " . $last_data['Site_Name']; ?></option>
                                        <?php 
                                           $query_all_department_value = $db_connect->prepare("
                                              SELECT
-                                                   Dep_ID,
-                                                   Dep_Name
+                                                   tbd.Dep_ID,
+                                                   tbd.Dep_Name,
+                                                   tbs.Site_Name as Site_Name
                                              FROM
-                                                   tbdepartment 
+                                                   tbdepartment  tbd
+                                             INNER JOIN tbsite tbs ON tbs.Site_ID = tbd.Site_ID
                                           ");
                                           $query_all_department_value->execute();
                                           while ($select_all_department_value = $query_all_department_value->fetch(PDO::FETCH_ASSOC)) {
                                        ?>
-                                          <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']; ?></option>
+                                          <option value="<?php echo $select_all_department_value['Dep_ID']; ?>"><?php echo $select_all_department_value['Dep_Name']. " - " . $select_all_department_value['Site_Name'] ; ?></option>
                                        <?php 
                                           }
                                        ?>
