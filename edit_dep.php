@@ -122,14 +122,15 @@
                                  <option value="<?php echo @$last_data['Emp_ID']; ?>"><?php echo $last_data['Emp_FirstName']." ".@$last_data['Emp_FirstName']; ?></option>
                                     <?php 
                                        $query_all_emp_value = $db_connect->prepare("
-                                          SELECT
-                                                Emp_ID ,
-                                                Emp_FirstName,
-                                                Emp_LastName
-                                          FROM
-                                                tbemployee 
-                                          WHERE
-                                                Emp_Username != 'admin' 
+                                       SELECT
+                                       tbemp.Emp_ID ,
+                                       tbemp.Emp_FirstName,
+                                       tbemp.Emp_LastName
+                                       FROM
+                                                tbemployee tbemp
+                                       INNER JOIN tbposition tbp ON tbp.Position_ID = tbemp.Position_ID
+                                       WHERE
+                                                tbp.Position_Name = 'Manager'
                                        ");
                                        $query_all_emp_value->execute();
                                     ?>

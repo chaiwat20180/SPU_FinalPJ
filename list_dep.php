@@ -112,13 +112,14 @@
                                                             <?php 
                                                             $query_all_emp_value = $db_connect->prepare("
                                                                 SELECT
-                                                                        Emp_ID ,
-                                                                        Emp_FirstName,
-                                                                        Emp_LastName
+                                                                        tbemp.Emp_ID ,
+                                                                        tbemp.Emp_FirstName,
+                                                                        tbemp.Emp_LastName
                                                                 FROM
-                                                                        tbemployee 
+                                                                        tbemployee tbemp
+                                                                INNER JOIN tbposition tbp ON tbp.Position_ID = tbemp.Position_ID
                                                                 WHERE
-                                                                        Emp_Username != 'admin' 
+                                                                        tbp.Position_Name = 'Manager'
                                                             ");
                                                             $query_all_emp_value->execute();
                                                             while ($select_all_emp_value = $query_all_emp_value->fetch(PDO::FETCH_ASSOC)) {
@@ -265,7 +266,16 @@
                                        <td class="align-middle"><?php echo $show_DepData['Dep_ID']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['Dep_Name']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['Site_Name']; ?></span></td>
-                                       <td class="align-middle"><?php echo $show_DepData['manager_FirstName']." ".$show_DepData['manager_LastName']; ?></td>
+                                       <td class="align-middle">
+                                          <?php 
+                                             if($show_DepData['manager_FirstName'] == ""){
+                                                echo "(empty)";
+                                             }
+                                             else{
+                                                echo $show_DepData['manager_FirstName']." ".$show_DepData['manager_LastName'];
+                                             }
+                                          ?>
+                                       </td>
                                        <td class="align-middle"><?php echo $show_DepData['CreateDateTime']; ?></td>
                                        <td class="align-middle"><?php echo $show_DepData['updated_by_FirstName']." ".$show_DepData['updated_by_LastName']; ?></td>
                                        <td>

@@ -286,7 +286,16 @@
                                        <td class="align-middle"><?php echo $show_siteData['Site_City']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['Site_Province']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['Site_Postal_Code']; ?></td>
-                                       <td class="align-middle"><?php echo $show_siteData['manager_FirstName']." ".$show_siteData['manager_LastName']; ?></td>
+                                       <td class="align-middle">
+                                          <?php 
+                                             if($show_siteData['manager_FirstName'] == ""){
+                                                echo "(empty)";
+                                             }
+                                             else{
+                                                echo $show_siteData['manager_FirstName']." ".$show_siteData['manager_LastName'];
+                                             }
+                                          ?>
+                                       </td>
                                        <td class="align-middle"><?php echo $show_siteData['CreateDateTime']; ?></td>
                                        <td class="align-middle"><?php echo $show_siteData['updated_by_FirstName']." ".$show_siteData['updated_by_LastName']; ?></td>
                                        <td>
